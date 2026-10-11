@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>韓国語中級編２</title>
+<meta name="theme-color" content="#3d4f6e">
+<!-- href は下のスクリプトが生成して差し込む(空のままではChromeが「アプリ」と認識しない) -->
+<link rel="manifest" id="manifest-placeholder" href="">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="韓国語中級編２">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" id="apple-touch-icon-placeholder" href="">
+<script>
+/* ==== PWAマニフェストとアイコン(🇰🇷絵文字)をその場で生成 ==== 
+   Chromeのインストール条件: 有効なマニフェスト(192px/512pxのPNGアイコン付き)・HTTPS・Service Worker。
+   絵文字をcanvasでPNGに変換するので、別ファイルの画像は不要。
+   (※ページの読み込み完了を待たず、ここで即座に差し込む) */
+(function () {
+  function makeIcon(size) {
+    var c = document.createElement('canvas');
+    c.width = size; c.height = size;
+    var g = c.getContext('2d');
+    g.fillStyle = '#3d4f6e';
+    g.fillRect(0, 0, size, size);
+    g.font = Math.floor(size * 0.5) + 'px "Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText('\uD83C\uDDF0\uD83C\uDDF7', size / 2, size / 2 + size * 0.03); // 🇰🇷
+    return c.toDataURL('image/png');
+  }
+
+  var pageUrl = location.href.split('#')[0].split('?')[0];
+  var scopeUrl = pageUrl.substring(0, pageUrl.lastIndexOf('/') + 1);
+  var icon192 = makeIcon(192);
+  var icon512 = makeIcon(512);
+
+  var manifest = {
+    id: location.pathname,
+    name: '韓国語中級編２',
+    short_name: '中級編２',
+    description: '韓国語中級編２の練習',
+    start_url: pageUrl,
+    scope: scopeUrl,
+    display: 'standalone',
+    orientation: 'portrait',
+    background_color: '#f4e8c9',
+    theme_color: '#3d4f6e',
+    icons: [
+      { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+    ]
+  };
+
+  var blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+  document.getElementById('manifest-placeholder').setAttribute('href', URL.createObjectURL(blob));
+  document.getElementById('apple-touch-icon-placeholder').setAttribute('href', icon192);
+})();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
+    reg.update();
+  }).catch(function (e) {
+    console.warn('service worker登録失敗', e);
+  });
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board:#3d4f6e; --board-dark:#28364d;
+    --parchment:#f4e8c9; --parchment-dark:#e6d5a3; --parchment-line:#d3bd80;
+    --ink:#3b2a18; --ink-soft:#7a6544; --gold:#c9932a; --gold-bright:#f0c869;
+    --correct:#2f7a4d; --correct-bg:#e3f2e6; --wrong:#b23a2a; --wrong-bg:#fbe6e2;
+    --teal:#2d6e6e; --teal-dark:#1f4f4f;
+    --header-color:#4a5f8a; --header-color-2:#2f4064;
+    --shadow-hard:0 4px 0 rgba(0,0,0,.25); --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Noto Sans JP','Noto Sans KR',sans-serif;
+    background:radial-gradient(circle at 20% 10%, rgba(255,255,255,.05), transparent 40%),
+      repeating-linear-gradient(45deg, rgba(0,0,0,.03) 0 2px, transparent 2px 6px), var(--board);
+    color:var(--ink); min-height:100vh; padding-bottom:60px;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:0 0 24px;}
+  .kr{font-family:'Noto Sans KR','Noto Sans JP',sans-serif;}
+  #statusHeader{
+    position:relative; z-index:30;
+    background:linear-gradient(160deg,var(--header-color),var(--header-color-2));
+    color:#fff9e8; padding:14px 16px 12px; box-shadow:0 3px 10px rgba(0,0,0,.35);
+    transition:background .8s ease; border-bottom:3px solid rgba(0,0,0,.25);
+  }
+  .header-top{display:flex;align-items:center;gap:12px;}
+  .emblem{
+    font-size:34px; line-height:1; width:52px;height:52px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), rgba(255,255,255,0) 60%), rgba(0,0,0,.18);
+    border:2px solid rgba(255,255,255,.55); flex:none;
+  }
+  .level-glow{box-shadow:0 0 14px 2px rgba(240,200,105,.7); animation:pulse 2.2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{ box-shadow:0 0 8px 1px rgba(240,200,105,.5);} 50%{ box-shadow:0 0 18px 5px rgba(240,200,105,.85);}}
+  .header-titles{flex:1;min-width:0;}
+  .level-num{font-size:11px; letter-spacing:.14em; opacity:.85; font-weight:700;}
+  .level-name{font-family:'Shippori Mincho',serif; font-size:20px; font-weight:800; line-height:1.25; word-break:break-word;}
+  .header-score{text-align:right; font-size:12px; opacity:.9; flex:none;}
+  .header-score b{font-size:16px; display:block;}
+  .xp-row{margin-top:10px;}
+  .xp-track{background:rgba(0,0,0,.28); border-radius:20px; height:10px; overflow:hidden; border:1px solid rgba(255,255,255,.25);}
+  .xp-fill{height:100%; background:linear-gradient(90deg,#f0c869,#fff3c9); border-radius:20px; transition:width .6s ease;}
+  .xp-label{font-size:10.5px; margin-top:4px; opacity:.9; display:flex; justify-content:space-between;}
+  .picker-toggle{
+    width:100%; margin-top:12px; background:rgba(0,0,0,.22); color:#fff9e8; border:1px solid rgba(255,255,255,.3);
+    border-radius:10px; padding:9px 12px; font-size:13px; font-weight:700;
+    display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-family:inherit;
+  }
+  .picker-toggle:active{background:rgba(0,0,0,.35);}
+  .chev{transition:transform .3s ease; font-size:12px;}
+  .picker-toggle.open .chev{transform:rotate(180deg);}
+  #sessionPickerPanel,#reviewPanel{max-height:0; overflow:hidden; transition:max-height .35s ease; background:var(--board-dark);}
+  #sessionPickerPanel.open,#reviewPanel.open{max-height:30000px;}
+  .review-inner{padding:16px;}
+  .review-count-chip{display:inline-block; background:rgba(255,255,255,.18); border-radius:20px; padding:2px 10px; font-size:11px; margin-left:6px; font-weight:700;}
+  .review-sess-tag{display:inline-block; font-size:11px; font-weight:800; color:#7a5a10; background:#fff3d6; border:1px solid var(--gold); padding:2px 9px; border-radius:20px; margin-bottom:6px;}
+  .review-undo-btn{border-color:var(--ink-soft); color:var(--ink-soft);}
+  .review-toggle-btn.on{background:#8a6a12; border-color:#8a6a12; color:#fff;}
+  .empty-hint{font-size:13px; color:var(--ink-soft); line-height:1.7; padding:6px 2px;}
+  .mic-btn{flex:none; width:36px; height:36px; border-radius:50%; border:1.5px solid var(--teal); background:#fff; color:var(--teal-dark); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:inherit;}
+  .mic-btn.listening{background:var(--wrong); border-color:var(--wrong); color:#fff; animation:micPulse 1.1s ease-in-out infinite;}
+  @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(196,60,60,.55);} 50%{box-shadow:0 0 0 9px rgba(196,60,60,0);}}
+  .speak-btn{flex:none; width:30px; height:30px; border-radius:50%; border:1.5px solid #8a6a12; background:#fff; color:#8a6a12; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:inherit;}
+  .speak-btn.speaking{background:#8a6a12; border-color:#8a6a12; color:#fff; animation:micPulse 1.1s ease-in-out infinite;}
+  .speak-btn[disabled]{opacity:.35; cursor:not-allowed;}
+  .ans-kr-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .example-answer-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:4px;}
+  .picker-inner{padding:16px;}
+  .panel-block{background:var(--parchment); border-radius:var(--radius); padding:14px; margin-bottom:14px; box-shadow:var(--shadow-hard); border:1px solid var(--parchment-line);}
+  .panel-title{font-family:'Shippori Mincho',serif; font-weight:800; font-size:14px; margin:0 0 10px; color:var(--ink); display:flex; align-items:center; gap:6px;}
+  .level-roadmap{max-height:190px; overflow-y:auto; border:1px solid var(--parchment-line); border-radius:10px; background:var(--parchment-dark);}
+  .lv-row{display:flex; align-items:center; gap:8px; padding:6px 10px; font-size:12.5px; border-bottom:1px dashed var(--parchment-line);}
+  .lv-row:last-child{border-bottom:none;}
+  .lv-num{width:26px; flex:none; font-weight:800; opacity:.7;}
+  .lv-name{flex:1; font-family:'Shippori Mincho',serif; font-weight:600;}
+  .lv-row.done{color:var(--ink-soft);}
+  .lv-row.done .lv-num::after{content:'✓'; margin-left:2px; color:var(--correct);}
+  .lv-row.current{background:linear-gradient(90deg, rgba(240,200,105,.4), rgba(240,200,105,.1)); font-weight:800; color:var(--ink);}
+  .lv-row.locked{opacity:.4;}
+  .overall-progress{font-size:13px; margin-bottom:8px;}
+  .bar-track{background:var(--parchment-dark); border:1px solid var(--parchment-line); border-radius:20px; height:12px; overflow:hidden; margin-top:6px;}
+  .bar-fill{height:100%; background:linear-gradient(90deg,var(--teal),#4fa39e); border-radius:20px; transition:width .5s ease;}
+  .reset-btn{margin-top:10px; width:100%; background:#fff; border:1.5px solid var(--wrong); color:var(--wrong); font-weight:700; padding:8px; border-radius:8px; font-size:12.5px; cursor:pointer; font-family:inherit;}
+  .session-list{display:flex; flex-direction:column; gap:10px;}
+  .session-card{border-radius:10px; padding:12px; border:2px solid var(--parchment-line); background:var(--parchment-dark); cursor:pointer; text-align:left; font-family:inherit; display:flex; align-items:center; gap:10px;}
+  .session-card.status-untouched{border-color:#b7a677;}
+  .session-card.status-progress{border-color:var(--gold); background:linear-gradient(135deg,#fdf1cf,#f4e1a6);}
+  .session-card.status-complete{border-color:var(--correct); background:linear-gradient(135deg,#e4f5e9,#c9ecd4);}
+  .session-card .sc-badge{width:40px;height:40px;border-radius:50%;flex:none; display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800; background:#fff; border:2px solid var(--parchment-line); color:var(--ink);}
+  .status-complete .sc-badge{border-color:var(--correct); color:var(--correct);}
+  .status-progress .sc-badge{border-color:var(--gold); color:#8a6a12;}
+  .sc-text{flex:1; min-width:0;}
+  .sc-title{font-family:'Shippori Mincho',serif; font-weight:800; font-size:14.5px;}
+  .sc-sub{font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+  .sc-count{font-size:12px; font-weight:700; margin-top:3px;}
+  main{padding:16px;}
+  .session-header{background:var(--parchment); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow-hard); border:1px solid var(--parchment-line); margin-bottom:16px;}
+  .session-header h1{font-family:'Shippori Mincho',serif; font-size:19px; margin:0 0 2px;}
+  .session-header .kr-sub{font-size:13px; color:var(--ink-soft); margin-bottom:10px;}
+  .instruction{font-size:13.5px; line-height:1.7; background:var(--parchment-dark); border-radius:8px; padding:10px 12px; border-left:4px solid var(--teal);}
+  .example-card{margin-top:12px; background:#fffaf0; border:1.5px dashed var(--gold); border-radius:8px; padding:10px 12px;}
+  .example-label{font-size:11px; font-weight:800; color:var(--gold); letter-spacing:.08em; margin-bottom:4px;}
+  .dialogue-line{font-size:15px; line-height:1.6;}
+  .toppair, .bottompair{display:flex; gap:10px; margin-bottom:14px;}
+  .bulk-check-btn{flex:1; background:linear-gradient(160deg,var(--teal),var(--teal-dark)); color:#fff; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:800; box-shadow:var(--shadow-hard); cursor:pointer; font-family:inherit;}
+  .bulk-check-btn:active{transform:translateY(2px); box-shadow:none;}
+  .q-card{background:var(--parchment); border-radius:var(--radius); padding:14px; margin-bottom:12px; box-shadow:var(--shadow-hard); border:1px solid var(--parchment-line); position:relative;}
+  .q-card.marked-correct{border-color:var(--correct);}
+  .q-card.marked-wrong{border-color:var(--wrong);}
+  .q-top{display:flex; align-items:flex-start; gap:8px;}
+  .q-num{flex:none; width:28px;height:28px;border-radius:50%;background:var(--gold); color:#fff; display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
+  .q-body{flex:1; min-width:0;}
+  .q-a-line{font-size:15.5px; line-height:1.6;}
+  .q-jp{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+  .q-after{font-size:15px; line-height:1.6; margin-top:6px; padding-left:4px;}
+  .hint-chip{display:inline-block; margin-top:6px; background:#fff3d6; border:1px solid var(--gold); color:#7a5a10; font-size:11.5px; padding:2px 8px; border-radius:20px; font-weight:700;}
+  .answer-row{display:flex; align-items:center; gap:8px; margin-top:10px; flex-wrap:wrap;}
+  .who-prefix{font-weight:800; font-size:15px; white-space:nowrap;}
+  .ans-input{flex:1; min-width:110px; font-size:15px; padding:9px 10px; border-radius:8px; border:1.5px solid var(--parchment-line); background:#fffdf6; font-family:'Noto Sans KR',sans-serif;}
+  .ans-input:focus{outline:2px solid var(--teal); border-color:var(--teal);}
+  .mark{font-size:22px; font-weight:900; width:26px; text-align:center; flex:none;}
+  .mark.correct{color:var(--correct);} .mark.wrong{color:var(--wrong);}
+  .diff-line{margin-top:6px; padding:7px 10px; background:rgba(178,58,42,.07); border:1px solid rgba(178,58,42,.25); border-radius:8px; font-size:14px; line-height:1.5;}
+  .diff-line-label{font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:2px;}
+  .diff-wrong, .diff-allwrong{color:var(--wrong); font-weight:800; text-decoration:underline; text-decoration-color:rgba(178,58,42,.5);}
+  .diff-empty{color:var(--ink-soft); font-style:italic;}
+  .q-actions{display:flex; gap:8px; margin-top:10px;}
+  .mini-btn{flex:1; border-radius:8px; padding:8px; font-size:12.5px; font-weight:700; cursor:pointer; border:1.5px solid var(--teal); background:#fff; color:var(--teal-dark); font-family:inherit;}
+  .mini-btn.primary{background:var(--teal); color:#fff;}
+  .reveal-btn.on{background:var(--ink-soft); border-color:var(--ink-soft); color:#fff;}
+  .reveal-panel{max-height:0; overflow:hidden; transition:max-height .3s ease;}
+  .reveal-panel.open{max-height:300px; margin-top:10px;}
+  .reveal-inner{background:var(--parchment-dark); border-radius:8px; padding:10px 12px; font-size:13.5px; border-left:4px solid var(--gold);}
+  .reveal-inner .ans-kr{font-family:'Noto Sans KR',sans-serif; font-weight:800; font-size:15px; color:#7a5a10;}
+  .reveal-inner .ans-jp{margin-top:3px; color:var(--ink-soft);}
+  .session-reset-wrap{text-align:center; margin-top:6px;}
+  .session-reset-wrap button{background:none; border:none; color:#fff2d6; font-size:12px; text-decoration:underline; cursor:pointer; font-family:inherit; opacity:.85;}
+  .overlay{position:fixed; inset:0; background:rgba(20,12,4,.6); display:flex; align-items:center; justify-content:center; z-index:100; padding:20px; opacity:0; pointer-events:none; transition:opacity .25s ease;}
+  .overlay.show{opacity:1; pointer-events:auto;}
+  .modal-card{background:var(--parchment); border-radius:16px; padding:22px; max-width:340px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,.4); border:2px solid var(--gold); text-align:center; max-height:90vh; overflow:auto;}
+  .modal-card h3{font-family:'Shippori Mincho',serif; margin:0 0 10px; font-size:17px;}
+  .modal-card p{font-size:13.5px; line-height:1.6; margin:0 0 16px; color:var(--ink-soft);}
+  .modal-btn-row{display:flex; gap:10px;}
+  .modal-btn-row button{flex:1; padding:10px; border-radius:8px; font-weight:700; font-size:13.5px; cursor:pointer; font-family:inherit;}
+  .btn-cancel{background:#fff; border:1.5px solid var(--parchment-line); color:var(--ink);}
+  .btn-danger{background:var(--wrong); border:1.5px solid var(--wrong); color:#fff;}
+  #levelUpOverlay .modal-card{border-color:var(--gold-bright);}
+  .lvup-emblem{font-size:52px; margin-bottom:6px; animation:pop .6s ease;}
+  @keyframes pop{0%{transform:scale(.3); opacity:0;} 60%{transform:scale(1.15);} 100%{transform:scale(1); opacity:1;}}
+  .lvup-title{font-size:12px; letter-spacing:.15em; color:var(--gold); font-weight:800; margin-bottom:6px;}
+  .lvup-text{font-size:15.5px; line-height:1.7;}
+  .lvup-text b{font-family:'Shippori Mincho',serif; font-size:18px;}
+  .lvup-arrow{color:var(--ink-soft); margin:0 6px;}
+  .btn-ok{margin-top:16px; width:100%; background:linear-gradient(160deg,var(--gold-bright),var(--gold)); border:none; color:#4a3505; font-weight:800; padding:11px; border-radius:8px; font-size:14px; cursor:pointer; font-family:inherit;}
+  #dataModal .modal-card{max-width:420px; text-align:left;}
+  #dataModal h3{text-align:center;}
+  .data-section{margin-bottom:16px;}
+  .data-section-title{font-weight:800; font-size:13.5px; margin-bottom:6px; color:var(--ink);}
+  .data-section p{margin:0 0 8px;}
+  .data-btn-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .data-btn{flex:1; min-width:120px; padding:9px 10px; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer; font-family:inherit; border:1.5px solid var(--gold); background:#fff; color:var(--ink);}
+  .data-btn.primary{background:linear-gradient(160deg,var(--gold-bright),var(--gold)); border:none; color:#4a3505;}
+  #dataTextarea,#importTextarea{width:100%; min-height:110px; margin-top:8px; padding:8px; border-radius:8px; border:1.5px solid var(--parchment-line); background:#fffdf5; font-family:monospace; font-size:11.5px; resize:vertical;}
+  #dataImportFile{display:none;}
+  .data-status{font-size:12.5px; margin-top:6px; min-height:16px; font-weight:700;}
+  .data-status.ok{color:var(--correct);} .data-status.err{color:var(--wrong);}
+  .data-divider{border:none; border-top:1.5px dashed var(--parchment-line); margin:14px 0;}
+  .data-modal-close{margin-top:18px; width:100%; background:#fff; border:1.5px solid var(--parchment-line); color:var(--ink); font-weight:700; padding:10px; border-radius:8px; font-size:13.5px; cursor:pointer; font-family:inherit;}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important;}}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header id="statusHeader">
+    <div class="header-top">
+      <div class="emblem" id="emblemBox">🧑‍🌾</div>
+      <div class="header-titles">
+        <div class="level-num" id="levelNumLabel">レベル 1</div>
+        <div class="level-name" id="levelNameLabel">村人</div>
+      </div>
+      <div class="header-score">合計スコア<b id="totalScoreLabel">0</b></div>
+    </div>
+    <div class="xp-row">
+      <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+      <div class="xp-label"><span id="xpLabelLeft">次のレベルまで正解 1問</span><span id="xpLabelRight"></span></div>
+    </div>
+    <button class="picker-toggle" id="pickerToggleBtn"><span>📜 セッション選択・レベル一覧</span><span class="chev">▼</span></button>
+    <button class="picker-toggle" id="reviewPickerToggleBtn" style="margin-top:8px;"><span>🔁 後で復習リスト<span class="review-count-chip" id="reviewCountChip">0 問</span></span><span class="chev">▼</span></button>
+    <button class="picker-toggle" id="dataMenuToggleBtn" style="margin-top:8px;"><span>💾 データの書き出し・読み込み</span><span class="chev">▼</span></button>
+  </header>
+
+  <div id="reviewPanel"><div class="review-inner"><div class="panel-block" style="margin-bottom:0;"><p class="panel-title">🔁 後で復習リスト</p><div id="reviewList"></div></div></div></div>
+
+  <div id="sessionPickerPanel">
+    <div class="picker-inner">
+      <div class="panel-block"><p class="panel-title">🏆 冒険者ランク一覧</p><div class="level-roadmap" id="levelRoadmap"></div></div>
+      <div class="panel-block">
+        <p class="panel-title">📊 全体の進捗</p>
+        <div class="overall-progress"><span id="overallCountLabel">0 / 0 問 正解</span><div class="bar-track"><div class="bar-fill" id="overallBarFill" style="width:0%"></div></div></div>
+        <button class="reset-btn" id="overallResetBtn">全体の記録をリセットする</button>
+      </div>
+      <div class="panel-block" style="margin-bottom:0;"><p class="panel-title">🗂 クエスト一覧</p><div class="session-list" id="sessionList"></div></div>
+    </div>
+  </div>
+
+  <main><div id="sessionView"></div></main>
+</div>
+
+<div class="overlay" id="confirmModal">
+  <div class="modal-card">
+    <h3>本当にリセットしますか？</h3>
+    <p id="confirmModalText">この操作を行うと記録が消え、元に戻せません。</p>
+    <div class="modal-btn-row"><button class="btn-cancel" id="confirmCancelBtn">キャンセル</button><button class="btn-danger" id="confirmOkBtn">リセットする</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="dataModal">
+  <div class="modal-card">
+    <h3>💾 データの書き出し・読み込み</h3>
+    <div class="data-section">
+      <p class="data-section-title">📤 書き出し（バックアップ・機種変更用）</p>
+      <p>今の学習記録をファイルに保存します。他の端末で読み込めば続きから再開できます。</p>
+      <div class="data-btn-row"><button class="data-btn primary" id="exportDownloadBtn">ファイルに保存</button><button class="data-btn" id="exportShowBtn">テキストを表示</button></div>
+      <textarea id="dataTextarea" class="hidden" readonly></textarea>
+      <div class="data-btn-row hidden" id="exportCopyRow" style="margin-top:8px;"><button class="data-btn" id="exportCopyBtn">コピーする</button></div>
+    </div>
+    <hr class="data-divider">
+    <div class="data-section">
+      <p class="data-section-title">📥 読み込み（別端末のデータを反映）</p>
+      <p>保存したファイル、またはコピーしたテキストを読み込みます。<b>今のこの端末の記録は上書きされます。</b>（中級編１のデータは読み込めません）</p>
+      <div class="data-btn-row"><button class="data-btn primary" id="importFileBtn">ファイルを選ぶ</button><button class="data-btn" id="importPasteBtn">テキストを貼り付け</button></div>
+      <input type="file" id="dataImportFile" accept="application/json,.json">
+      <textarea id="importTextarea" class="hidden" placeholder="ここにコピーしたJSONを貼り付けてください"></textarea>
+      <div class="data-btn-row hidden" id="importConfirmRow" style="margin-top:8px;"><button class="data-btn primary" id="importConfirmBtn">この内容を読み込む</button></div>
+      <div class="data-status" id="dataStatusMsg"></div>
+    </div>
+    <button class="data-modal-close" id="dataModalCloseBtn">閉じる</button>
+  </div>
+</div>
+
+<div class="overlay" id="levelUpOverlay">
+  <div class="modal-card">
+    <div class="lvup-emblem" id="lvupEmblem">✨</div>
+    <div class="lvup-title">LEVEL UP</div>
+    <div class="lvup-text">レベルが上がりました。<br><b id="lvupFrom"></b><span class="lvup-arrow">→</span><b id="lvupTo"></b><br>になりました。</div>
+    <button class="btn-ok" id="lvupOkBtn">やった！</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var LEVEL_NAMES = [
+"村人","強い村人","村の自警団","見習い兵士","兵士","熟練兵士","兵士長","冒険者","強い冒険者","熟練冒険者",
+"ベテラン冒険者","剣士","熟練剣士","剣豪","戦士","熟練戦士","重戦士","騎士","王国騎士","聖騎士",
+"聖騎士長","魔法使い","熟練魔法使い","大魔法使い","魔導士","大魔導士","魔法戦士","神官","大神官","賢者",
+"大賢者","導師","大導師","守護者","王国の守護者","英雄","大英雄","ドラゴンの騎士","勇者","大勇者",
+"聖勇者","勇者王","勇者の頂点","王国の伝説","大陸の伝説","世界の伝説","神話の英雄","神話の勇者","伝説の大勇者","神"
+];
+var EMBLEMS = [
+  {max:3, icon:"🧑‍🌾"},{max:7, icon:"🛡️"},{max:11, icon:"🗺️"},{max:14, icon:"⚔️"},
+  {max:17, icon:"🪓"},{max:21, icon:"🐎"},{max:27, icon:"🔮"},{max:31, icon:"⛪"},
+  {max:35, icon:"📿"},{max:39, icon:"🦸"},{max:43, icon:"🌟"},{max:46, icon:"🏆"},{max:50, icon:"👑"}
+];
+
+var SESSIONS = [{"id": "s41", "title": "練習問題41「〜거든」", "subKr": "~거든（〜したら）", "instruction": "「〜거든」は、仮定・条件を表し、後ろに命令（〜(으)세요）・勧誘（〜(으)ㅂ시다）・意志（〜(으)ㄹ게요）が続く表現です（〜なら、〜したら）。例のように２つの文をつなげましょう。", "example": {"lang": "kr", "a": "몸이 아프다 / 쉬세요.", "aJp": "体が痛い／休んでください", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "몸이 아프거든 쉬세요.", "bJp": "体の具合が悪かったら、休んでください。"}, "questions": [{"lang": "kr", "a": "마리 씨를 만나다 / 안부를 전해 주세요.", "aJp": "マリさんに会う／よろしくお伝えください", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "마리 씨를 만나거든 안부를 전해 주세요.", "bJp": "マリさんに会ったら、よろしくお伝えください。", "id": "q1"}, {"lang": "kr", "a": "숙제를 끝내다 / 같이 놉시다.", "aJp": "宿題を終える／一緒に遊びましょう", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "숙제를 끝내거든 같이 놉시다.", "bJp": "宿題を終えたら、一緒に遊びましょう。", "id": "q2"}, {"lang": "kr", "a": "약속이 있다 / 먼저 가세요.", "aJp": "約束がある／先に行ってください", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "약속이 있거든 먼저 가세요.", "bJp": "約束があるなら、先に行ってください。", "id": "q3"}, {"lang": "kr", "a": "급한 일이 생기다 / 연락할게요.", "aJp": "急ぎの用事ができる／連絡します", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "급한 일이 생기거든 연락할게요.", "bJp": "急用ができたら、連絡しますね。", "id": "q4"}, {"lang": "kr", "a": "한국어를 잘 하고 싶다 / 열심히 공부하세요.", "aJp": "韓国語が上手になりたい／熱心に勉強してください", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "한국어를 잘 하고 싶거든 열심히 공부하세요.", "bJp": "韓国語が上手になりたいなら、熱心に勉強してください。", "id": "q5"}, {"lang": "kr", "a": "날씨가 좋다 / 산책합시다.", "aJp": "天気が良い／散歩しましょう", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "날씨가 좋거든 산책합시다.", "bJp": "天気が良ければ、散歩しましょう。", "id": "q6"}]}, {"id": "s42", "title": "練習問題42「〜어(아,여)다가」", "subKr": "~어(아,여)다가（〜して持って行って）", "instruction": "ある動作をして、その結果（持って行ける物など）をもとに、場所を変えて次の動作をする表現です。「〜して（持って行って）、〜した」というニュアンスです。例のように２つの文をつなげましょう。", "example": {"lang": "kr", "a": "케이크를 만들다 / 친구와 같이 먹었다", "aJp": "ケーキを作る／友達と一緒に食べた", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "케이크를 만들어다가 친구와 같이 먹었어요.", "bJp": "ケーキを作って（持って行って）、友達と一緒に食べました。"}, "questions": [{"lang": "kr", "a": "고기를 사다 / 요리하다", "aJp": "肉を買う／料理する", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "고기를 사다가 요리해요.", "bJp": "肉を買ってきて料理します。", "id": "q1"}, {"lang": "kr", "a": "책을 빌리다 / 읽었다", "aJp": "本を借りる／読んだ", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "책을 빌려다가 읽었어요.", "bJp": "本を借りてきて読みました。", "id": "q2"}, {"lang": "kr", "a": "꽃을 사다 / 여자 친구에게 줬다", "aJp": "花を買う／彼女にあげた", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "꽃을 사다가 여자 친구에게 줬어요.", "bJp": "花を買ってきて彼女にあげました。", "id": "q3"}, {"lang": "kr", "a": "DVD를 빌리다 / 봤다", "aJp": "DVDを借りる／見た", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "DVD를 빌리다가 봤어요.", "bJp": "DVDを借りてきて見ました。", "id": "q4"}, {"lang": "kr", "a": "공책을 사다 / 숙제를 했다", "aJp": "ノートを買う／宿題をした", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "공책을 사다가 숙제를 했어요.", "bJp": "ノートを買ってきて宿題をしました。", "id": "q5"}, {"lang": "kr", "a": "사진을 찍다 / 어머니께 보여 줬다", "aJp": "写真を撮る／母に見せてあげた", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "사진을 찍어다가 어머니께 보여 줬어요.", "bJp": "写真を撮ってきて母に見せてあげました。", "id": "q6"}]}, {"id": "s43", "title": "練習問題43「〜(이)라도」", "subKr": "~(이)라도（〜でも）", "instruction": "最善ではないが、次善の策として「〜でも」と提案・譲歩する表現です。「〜(으)면 〜(이)라도」の形でよく使います。例のように文を作りましょう。", "example": {"lang": "kr", "a": "아침을 먹을 시간이 없다 / 과일 / 드세요.", "aJp": "朝ご飯を食べる時間がない／果物／召し上がってください", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "아침을 먹을 시간이 없으면 과일이라도 드세요.", "bJp": "朝ご飯を食べる時間がなければ、果物でも召し上がってください。"}, "questions": [{"lang": "kr", "a": "밥이 없다 / 빵 / 먹을게요.", "aJp": "ご飯がない／パン／食べます", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "밥이 없으면 빵이라도 먹을게요.", "bJp": "ご飯がなければ、パンでも食べます。", "id": "q1"}, {"lang": "kr", "a": "부모님을 만나러 갈 수 없다 / 전화 / 하세요.", "aJp": "両親に会いに行けない／電話／してください", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "부모님을 만나러 갈 수 없으면 전화라도 하세요.", "bJp": "両親に会いに行けないなら、電話でもしてください。", "id": "q2"}, {"lang": "kr", "a": "일이 있어서 친구 생일 파티에 갈 수 없다 / 카드 / 보낼게요.", "aJp": "用事があって友達の誕生日パーティーに行けない／カード／送ります", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "일이 있어서 친구 생일 파티에 갈 수 없으니까 카드라도 보낼게요.", "bJp": "用事があって友達の誕生日パーティーに行けないので、カードでも送ります。", "id": "q3"}, {"lang": "kr", "a": "돈이 없다 / 중고차 / 사세요.", "aJp": "お金がない／中古車／買ってください", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "돈이 없으면 중고차라도 사세요.", "bJp": "お金がなければ、中古車でも買ってください。", "id": "q4"}]}, {"id": "s44", "title": "練習問題44「〜더라고요」", "subKr": "~더라고요（〜していましたよ）", "instruction": "自分が直接見たり経験したりして知ったことを、相手に伝える「〜더라고요」の表現です（〜でしたよ／〜していましたよ）。主語が「私」のときは使えません。例のように、（　）内のヒントを使って「나」の返事を完成させましょう。", "example": {"lang": "kr", "a": "가: 사람이 많았어요?", "aJp": "人が多かったですか？", "hint": null, "hintJp": null, "bPrefix": "나: 네, ", "bAnswer": "많더라고요.", "bJp": "はい、多かったですよ（見たら多かったんです）。"}, "questions": [{"lang": "kr", "a": "가: 어제 시험이 어려웠어요?", "aJp": "昨日の試験は難しかったですか？", "hint": null, "hintJp": null, "bPrefix": "나: 네, ", "answer": "어렵더라고요.", "bJp": "はい、難しかったですよ。", "id": "q1"}, {"lang": "kr", "a": "가: 그 영화가 어땠어요?", "aJp": "その映画はどうでしたか？", "hint": "재미있다", "hintJp": "面白い", "bPrefix": "나: ", "answer": "재미있더라고요.", "bJp": "面白かったですよ。", "id": "q2"}, {"lang": "kr", "a": "가: 강아지가 어땠어요?", "aJp": "子犬はどうでしたか？", "hint": "귀엽다", "hintJp": "かわいい", "bPrefix": "나: ", "answer": "귀엽더라고요.", "bJp": "かわいかったですよ。", "id": "q3"}, {"lang": "kr", "a": "가: 리에 씨가 한국말을 잘 해요?", "aJp": "リエさんは韓国語が上手ですか？", "hint": null, "hintJp": null, "bPrefix": "나: 네, ", "answer": "잘 하더라고요.", "bJp": "はい、上手でしたよ。", "id": "q4"}, {"lang": "kr", "a": "가: 웨이 씨가 그렇게 말했어요?", "aJp": "ウェイさんはそう言いましたか？", "hint": null, "hintJp": null, "bPrefix": "나: 네, ", "answer": "그렇게 말하더라고요.", "bJp": "はい、そう言っていましたよ。", "id": "q5"}, {"lang": "kr", "a": "가: 리에 씨 남자친구를 알아요?", "aJp": "リエさんの彼氏を知っていますか？", "hint": "잘 생겼다", "hintJp": "かっこいい", "bPrefix": "나: 네, ", "answer": "잘 생겼더라고요.", "bJp": "はい、かっこよかったですよ。", "id": "q6"}, {"lang": "kr", "a": "가: 리에 씨가 어제 파마를 했다고 들었는데요.", "aJp": "リエさんが昨日パーマをかけたと聞きましたが。", "hint": "예쁘게 파마했다", "hintJp": "きれいにパーマをかけた", "bPrefix": "나: 네, 오늘 만났는데 ", "answer": "예쁘게 파마했더라고요.", "bJp": "はい、今日会ったんですが、きれいにパーマをかけていましたよ。", "id": "q7"}]}, {"id": "s45", "title": "練習問題45「〜다니요?」", "subKr": "~다니요?（〜ですって？）", "instruction": "相手の話を聞いて、信じられなかったり驚いたりしたとき、あるいは否定的に聞き返すときに使う「〜(ㄴ/는)다니요?（〜ですって？）」の表現です。会話の空欄に入る聞き返しの文を作りましょう。", "example": {"lang": "kr", "a": "가: 이것 다 외우십시오.", "aJp": "これを全部覚えてください。", "hint": null, "hintJp": null, "bPrefix": "나: ", "bAnswer": "다 외우라니요?", "bJp": "全部覚えろですって？"}, "questions": [{"lang": "kr", "a": "마리아: 웨이 씨는 중국 사람인데 한국어를 잘 하네요.", "aJp": "マリア：ウェイさんは中国人なのに韓国語が上手ですね。", "hint": null, "hintJp": null, "bPrefix": "리에: ", "answer": "중국 사람이라니요?", "bJp": "中国人ですって？", "after": "저는 웨이씨가 한국 사람인 줄 알았어요.", "id": "q1"}, {"lang": "kr", "a": "가: 다음 주 시험은 아주 어렵대요.", "aJp": "来週の試験はとても難しいそうですよ。", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "어렵다니요?", "bJp": "難しいですって？", "after": "저는 쉽다고 생각해서 공부하지 않았는데 어떻게 하지요?", "id": "q2"}, {"lang": "kr", "a": "가: 저는 회사를 그만두겠어요.", "aJp": "私は会社を辞めます。", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "그만두겠다니요?", "bJp": "辞めるですって？", "id": "q3"}, {"lang": "kr", "a": "마리아: 리에 씨는 날마다 책을 10권 읽어요.", "aJp": "マリア：リエさんは毎日本を10冊読みます。", "hint": null, "hintJp": null, "bPrefix": "웨이: ", "answer": "10권 읽다니요?", "bJp": "10冊読むですって？", "after": "책 읽기를 아주 좋아하는군요.", "alts": ["10권 읽는다니요?"], "id": "q4"}, {"lang": "kr", "a": "가: 저는 회사를 그만뒀어요.", "aJp": "私は会社を辞めました。", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "그만뒀다니요?", "bJp": "辞めたですって？", "after": "앞으로 어떻게 하려고요?", "id": "q5"}, {"lang": "kr", "a": "가: 내일까지 이 일을 끝내세요.", "aJp": "明日までにこの仕事を終えてください。", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "내일까지 끝내라니요?", "bJp": "明日まで終わらせろですって？", "after": "좀 시간이 부족한 것 같은데요.", "id": "q6"}, {"lang": "kr", "a": "가: 회의 주제를 바꿉시다.", "aJp": "会議のテーマを変えましょう。", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "주제를 바꾸자니요?", "bJp": "テーマを変えようですって？", "after": "이제 와서 주제를 바꾸면 잘 마무리하지 못 할 것 같은데요.", "id": "q7"}]}, {"id": "s46", "title": "練習問題46「〜고 나서」", "subKr": "~고 나서（〜してから）", "instruction": "「〜した後に〜する」という意味で、前の動作が終わってから次の動作をすることを表す「〜고 나서」の表現です。例のように２つの文をつなげましょう。", "example": {"lang": "kr", "a": "점심을 먹다 / 도서관에 가다", "aJp": "昼食を食べる／図書館に行く", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "점심을 먹고 나서 도서관에 갑니다.", "bJp": "昼食を食べてから図書館に行きます。"}, "questions": [{"lang": "kr", "a": "숙제를 하다 / 저녁을 먹다", "aJp": "宿題をする／夕食を食べる", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "숙제를 하고 나서 저녁을 먹습니다.", "bJp": "宿題をしてから夕食を食べます。", "id": "q1"}, {"lang": "kr", "a": "청소를 하다 / 빨래하다", "aJp": "掃除をする／洗濯する", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "청소를 하고 나서 빨래합니다.", "bJp": "掃除をしてから洗濯します。", "id": "q2"}, {"lang": "kr", "a": "저녁을 먹다 / TV를 봤다", "aJp": "夕食を食べる／テレビを見た", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "저녁을 먹고 나서 TV를 봤습니다.", "bJp": "夕食を食べてからテレビを見ました。", "id": "q3"}, {"lang": "kr", "a": "이 책을 읽다 / 토론합시다.", "aJp": "この本を読む／討論しましょう", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "이 책을 읽고 나서 토론합시다.", "bJp": "この本を読んでから討論しましょう。", "id": "q4"}, {"lang": "kr", "a": "졸업하다 / 취직할 거예요.", "aJp": "卒業する／就職するつもりです", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "졸업하고 나서 취직할 거예요.", "bJp": "卒業してから就職するつもりです。", "id": "q5"}]}, {"id": "s47", "title": "練習問題47「〜지」", "subKr": "~지（〜すれば良いのに）", "instruction": "相手や第三者の行動に対して「〜すれば良いのに」「〜すれば良かったのに」という不満や残念な気持ちを表す「〜지」の表現です。友達や目下の人に使い、目上の人に使うと失礼になります。（単語：데리다＝連れる／부르다＝呼ぶ／깨우다＝起こす）", "example": {"lang": "kr", "a": "내 것도 사 주다", "aJp": "私のも買ってあげる", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "내 것도 사 주지.", "bJp": "私のも買ってくれればいいのに。"}, "questions": [{"lang": "kr", "a": "나도 데리고 가다", "aJp": "私も連れて行く", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "나도 데리고 가지.", "bJp": "私も連れて行ってくれればいいのに。", "id": "q1"}, {"lang": "kr", "a": "나도 불러 주다", "aJp": "私も呼んであげる", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "나도 불러 주지.", "bJp": "私も呼んでくれればいいのに。", "id": "q2"}, {"lang": "kr", "a": "깨워 주다", "aJp": "起こしてあげる", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "깨워 주지.", "bJp": "起こしてくれればいいのに。", "id": "q3"}, {"lang": "kr", "a": "전화하다", "aJp": "電話する", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "전화하지.", "bJp": "電話すればいいのに。", "id": "q4"}, {"lang": "kr", "a": "일찍 자다", "aJp": "早く寝る", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "일찍 자지.", "bJp": "早く寝ればいいのに。", "id": "q5"}]}, {"id": "s48", "title": "練習問題48「〜는다니까」", "subKr": "~는다니까（〜だと言うから）", "instruction": "他の人が言ったことを根拠にして、後ろに指示（〜してください）や勧誘（〜しましょう）を続ける「〜(ㄴ/는)다니까」の表現です（〜だと言うから）。例のように２つの文をつなげましょう。", "example": {"lang": "kr", "a": "이 책이 재미있다 / 읽어 보세요.", "aJp": "この本が面白い／読んでみてください", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "이 책이 재미있다니까 읽어 보세요.", "bJp": "この本が面白いと言うから、読んでみてください。"}, "questions": [{"lang": "kr", "a": "좋은 사람이다 / 한번 만나 보세요.", "aJp": "いい人だ／一度会ってみてください", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "좋은 사람이라니까 한번 만나 보세요.", "bJp": "いい人だと言うから、一度会ってみてください。", "id": "q1"}, {"lang": "kr", "a": "제주도는 경치가 아름답다 / 가 봅시다.", "aJp": "済州島は景色が美しい／行ってみましょう", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "제주도는 경치가 아름답다니까 가 봅시다.", "bJp": "済州島は景色が美しいと言うから、行ってみましょう。", "id": "q2"}, {"lang": "kr", "a": "할인 판매를 하다 / 가 봅시다.", "aJp": "セールをする／行ってみましょう", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "할인 판매를 한다니까 가 봅시다.", "bJp": "セールをやると言うから、行ってみましょう。", "id": "q3"}, {"lang": "kr", "a": "많은 사람들이 읽다 / 그 책을 사 보세요.", "aJp": "多くの人が読む／その本を買ってみてください", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "많은 사람들이 읽는다니까 그 책을 사 보세요.", "bJp": "多くの人が読むと言うから、その本を買ってみてください。", "id": "q4"}, {"lang": "kr", "a": "많은 사람들이 샀다 / 그 책을 읽어 보세요.", "aJp": "多くの人が買った／その本を読んでみてください", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "많은 사람들이 샀다니까 그 책을 읽어 보세요.", "bJp": "多くの人が買ったと言うから、その本を読んでみてください。", "id": "q5"}]}, {"id": "s49", "title": "練習問題49「〜지요」", "subKr": "~지요（勧め・意志・勧誘）", "instruction": "「〜지요」は、(1)相手への勧め・提案（目上には〜(으)시지요）、(2)自分の意志（〜します）、(3)勧誘（〜しましょう）を、やわらかく伝える表現です。（　）内の主語に合わせて形を変えましょう。（単語：한턱(을) 내다＝おごる）", "example": {"lang": "kr", "a": "(あなたは) 피곤해 보이니까 빨리 집에 가다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "피곤해 보이니까 빨리 집에 가시지요.", "bJp": "お疲れのようですから、早くお帰りになってください。"}, "questions": [{"lang": "kr", "a": "(あなたは) 한잔 더 하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "한잔 더 하시지요.", "bJp": "もう一杯どうぞ。", "id": "q1"}, {"lang": "kr", "a": "(あなたは) 우산을 가져 가다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "우산을 가져 가시지요.", "bJp": "傘をお持ちください。", "id": "q2"}, {"lang": "kr", "a": "제가 한턱내다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "제가 한턱내지요.", "bJp": "私がおごります。", "id": "q3"}, {"lang": "kr", "a": "(私は) 먼저 가다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "먼저 가지요.", "bJp": "私は先に行きます。", "id": "q4"}, {"lang": "kr", "a": "(私達) 한잔 하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "한잔 하지요.", "bJp": "一杯やりましょう。", "id": "q5"}, {"lang": "kr", "a": "(私達) 오늘은 바쁘니까 내일 하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "오늘은 바쁘니까 내일 하지요.", "bJp": "今日は忙しいので、明日にしましょう。", "id": "q6"}]}, {"id": "s50", "title": "練習問題50「〜는다는 것이」", "subKr": "~(ㄴ/는)다는 것이（〜するつもりが）", "instruction": "「〜するつもりが、〜なのでできなかった」「〜するつもりが、ついうっかり〜してしまった」と、初めの意図とは違う結果になったときの表現です。３つの文を１つにつなげましょう。（単語：늦잠을 자다＝朝寝坊する／그냥＝そのまま／그만＝つい、うっかり）", "example": {"lang": "kr", "a": "공부하다 / 재미있는 TV 프로그램이 있다 / 못했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "공부한다는 것이 재미있는 TV프로그램이 있어서 못했어요.", "bJp": "勉強するつもりが、面白いテレビ番組があってできませんでした。"}, "questions": [{"lang": "kr", "a": "일찍 오다 / 차가 밀리다 / 늦었다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "일찍 온다는 것이 차가 밀려서 늦었어요.", "bJp": "早く来るつもりが、渋滞で遅れました。", "id": "q1"}, {"lang": "kr", "a": "공부하다 / 피곤하다 / 그냥 잤다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "공부한다는 것이 피곤해서 그냥 잤어요.", "bJp": "勉強するつもりが、疲れてそのまま寝てしまいました。", "id": "q2"}, {"lang": "kr", "a": "아침에 운동하다 / 늦잠을 자다 / 못했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "아침에 운동한다는 것이 늦잠을 자서 못했어요.", "bJp": "朝運動するつもりが、寝坊してできませんでした。", "id": "q3"}, {"lang": "kr", "a": "책을 읽다 / 친구가 놀러 오다 / 놀았다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "책을 읽는다는 것이 친구가 놀러 와서 놀았어요.", "bJp": "本を読むつもりが、友達が遊びに来て遊んでしまいました。", "id": "q4"}, {"lang": "kr", "a": "다 쓴 공책을 버리다 / 그만 새 공책을 버렸다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "다 쓴 공책을 버린다는 것이 그만 새 공책을 버렸어요.", "bJp": "使い終わったノートを捨てるつもりが、うっかり新しいノートを捨ててしまいました。", "id": "q5"}, {"lang": "kr", "a": "일찍 일어나다 / 그만 늦잠을 잤다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "일찍 일어난다는 것이 그만 늦잠을 잤어요.", "bJp": "早く起きるつもりが、つい寝坊してしまいました。", "id": "q6"}]}, {"id": "s51", "title": "練習問題51「〜(으)ㄹ까 봐」", "subKr": "~(으)ㄹ까 봐（〜するかと思って）", "instruction": "「〜するかと思って（心配して）」と、前の文の状況になることを心配している気持ちを表す「〜(으)ㄹ까 봐」の表現です。例のように２つの文をつなげましょう。（単語：방해＝妨害／길을 잃다＝道に迷う／살이 찌다＝太る／오해＝誤解）", "example": {"lang": "kr", "a": "시험에 떨어지다 / 열심히 공부하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "시험에 떨어질까 봐 열심히 공부해요.", "bJp": "試験に落ちるかと思って、一生懸命勉強します。"}, "questions": [{"lang": "kr", "a": "길을 잃다 / 지도를 가지고 가다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "길을 잃을까 봐 지도를 가지고 가요.", "bJp": "道に迷うかと思って、地図を持って行きます。", "id": "q1"}, {"lang": "kr", "a": "다른 사람에게 방해가 되다 / 조용히 했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "다른 사람에게 방해가 될까 봐 조용히 했어요.", "bJp": "他の人の邪魔になるかと思って、静かにしました。", "id": "q2"}, {"lang": "kr", "a": "살이 찌다 / 적게 먹다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "살이 찔까 봐 적게 먹어요.", "bJp": "太るかと思って、少なく食べます。", "id": "q3"}, {"lang": "kr", "a": "버스로 가면 늦다 / 택시로 왔다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "버스로 가면 늦을까 봐 택시로 왔어요.", "bJp": "バスで行くと遅れるかと思って、タクシーで来ました。", "id": "q4"}, {"lang": "kr", "a": "오해하다 / 말하지 않았다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "오해할까 봐 말하지 않았어요.", "bJp": "誤解するかと思って、言いませんでした。", "id": "q5"}, {"lang": "kr", "a": "엄마가 화를 내다 / 걱정이다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "엄마가 화를 낼까 봐 걱정이에요.", "bJp": "母が怒るかと思って、心配です。", "id": "q6"}]}, {"id": "s52", "title": "練習問題52「〜어(아,여) 버리다」", "subKr": "~어(아,여) 버리다（〜してしまう）", "instruction": "「完全に終わってしまった」ことを表す「〜어(아,여) 버리다」の表現です（〜してしまう）。すっきりした気持ちや、残念な気持ちを含みます。例のように文を作りましょう。（単語：잊다＝忘れる）", "example": {"lang": "kr", "a": "맛있어서 다 먹다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "맛있어서 다 먹어 버렸어요.", "bJp": "おいしくて全部食べてしまいました。"}, "questions": [{"lang": "kr", "a": "여름이어서 머리를 짧게 자르다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "여름이어서 머리를 짧게 잘라 버렸어요.", "bJp": "夏なので髪を短く切ってしまいました。", "id": "q1"}, {"lang": "kr", "a": "재미있어서 하루 만에 읽다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "재미있어서 하루 만에 읽어 버렸어요.", "bJp": "面白くて一日で読んでしまいました。", "id": "q2"}, {"lang": "kr", "a": "영화가 재미없어서 극장에서 나오다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "영화가 재미없어서 극장에서 나와 버렸어요.", "bJp": "映画がつまらなくて、映画館から出てしまいました。", "id": "q3"}, {"lang": "kr", "a": "영어 공부가 어려워서 포기하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "영어 공부가 어려워서 포기해 버렸어요.", "bJp": "英語の勉強が難しくて、諦めてしまいました。", "id": "q4"}, {"lang": "kr", "a": "그 사람 이름을 잊다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "그 사람 이름을 잊어 버렸어요.", "bJp": "その人の名前を忘れてしまいました。", "id": "q5"}]}, {"id": "s53", "title": "練習問題53「〜잖아요」", "subKr": "~잖아요（〜じゃないですか）", "instruction": "すでに言ったことや、相手も知っているだろうと思うことを、再確認するように話す「〜잖아요」の表現です（〜じゃないですか）。（　）内の言葉を使って、「나」の返事を完成させましょう。", "example": {"lang": "kr", "a": "가: 요즘 날마다 덥네요.", "aJp": "最近毎日暑いですね。", "hint": "여름이다", "hintJp": "夏だ", "bPrefix": "나: ", "bAnswer": "여름이잖아요.", "bJp": "夏じゃないですか。"}, "questions": [{"lang": "kr", "a": "가: 웨이 씨가 중국말을 아주 잘 하던데요.", "aJp": "ウェイさんは中国語がとても上手でしたよ。", "hint": "중국 사람이다", "hintJp": "中国人だ", "bPrefix": "나: ", "answer": "중국 사람이잖아요.", "bJp": "中国人じゃないですか。", "id": "q1"}, {"lang": "kr", "a": "가: 피곤해 보여요.", "aJp": "疲れて見えます。", "hint": "너무 바쁘다", "hintJp": "忙しすぎる", "bPrefix": "나: ", "answer": "너무 바쁘잖아요.", "bJp": "忙しすぎるじゃないですか。", "id": "q2"}, {"lang": "kr", "a": "가: 유카 씨가 또 100점을 받았대요.", "aJp": "ユカさんがまた100点を取ったそうです。", "hint": "날마다 열심히 공부하다", "hintJp": "毎日熱心に勉強する", "bPrefix": "나: ", "answer": "날마다 열심히 공부하잖아요.", "bJp": "毎日熱心に勉強しているじゃないですか。", "id": "q3"}, {"lang": "kr", "a": "가: 옆 집 사람이 이혼했대요.", "aJp": "隣の家の人が離婚したそうです。", "hint": "날마다 싸우다", "hintJp": "毎日ケンカする", "bPrefix": "나: ", "answer": "날마다 싸우잖아요.", "bJp": "毎日ケンカしているじゃないですか。", "id": "q4"}, {"lang": "kr", "a": "가: 토마스 씨는 러시아어를 아주 잘 하던데요.", "aJp": "トマスさんはロシア語がとても上手でしたよ。", "hint": "러시아에서 5년 살았다", "hintJp": "ロシアで5年住んでいた", "bPrefix": "나: ", "answer": "러시아에서 5년 살았잖아요.", "bJp": "ロシアで5年住んでいたじゃないですか。", "id": "q5"}]}, {"id": "s54", "title": "練習問題54「〜고 해서」", "subKr": "~고 해서（〜だし、〜ということもあって）", "instruction": "理由がいくつかある中で、代表的な理由を挙げて「〜だし、〜ということもあって」と言う「〜고 해서」の表現です。「〜도 〜고 해서」の形でよく使います。例のように２つの文をつなげましょう。（単語：월세＝家賃）", "example": {"lang": "kr", "a": "날씨가 나쁘다 / 하루 종일 집에 있었다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "날씨도 나쁘고 해서 하루 종일 집에 있었어요.", "bJp": "天気も悪いし、一日中家にいました。"}, "questions": [{"lang": "kr", "a": "월세가 싸다 / 이 집으로 이사왔다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "월세도 싸고 해서 이 집으로 이사왔어요.", "bJp": "家賃も安いし、この家に引っ越してきました。", "id": "q1"}, {"lang": "kr", "a": "어제는 좀 피곤했다 / 일찍 잤다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "어제는 좀 피곤하고 해서 일찍 잤어요.", "bJp": "昨日は少し疲れていたこともあって、早く寝ました。", "id": "q2"}, {"lang": "kr", "a": "월급이 많다 / 이 회사에 취직했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "월급도 많고 해서 이 회사에 취직했어요.", "bJp": "給料も多いし、この会社に就職しました。", "id": "q3"}, {"lang": "kr", "a": "집에서 가깝다 / 이 백화점을 자주 이용하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "집에서도 가깝고 해서 이 백화점을 자주 이용해요.", "bJp": "家からも近いし、このデパートをよく利用します。", "id": "q4"}, {"lang": "kr", "a": "형이 하고 있다 / 야구를 시작했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "형도 하고 있고 해서 야구를 시작했어요.", "bJp": "兄もやっているし、野球を始めました。", "id": "q5"}]}, {"id": "s55", "title": "練習問題55「〜지 그래요?」", "subKr": "~지 그래요?（〜したらどうですか）", "instruction": "「〜したらどうですか？」とアドバイスする「〜지 그래요?」の表現です。過去のことには「〜지 그랬어요?（〜すれば良かったのに）」を使います。目上の人にはあまり使いません。（　）内の言葉を使って、「나」の返事を作りましょう。（単語：사과하다＝謝る／고치다＝直す）", "example": {"lang": "kr", "a": "가: 너무 피곤해요.", "aJp": "とても疲れました。", "hint": "일찍 퇴근하다", "hintJp": "早く退勤する", "bPrefix": "나: ", "bAnswer": "일찍 퇴근하지 그래요?", "bJp": "早く退勤したらどうですか？"}, "questions": [{"lang": "kr", "a": "가: 친구하고 싸웠어요.", "aJp": "友達とケンカしました。", "hint": "먼저 사과하다", "hintJp": "先に謝る", "bPrefix": "나: ", "answer": "먼저 사과하지 그래요?", "bJp": "先に謝ったらどうですか？", "id": "q1"}, {"lang": "kr", "a": "가: 더워요.", "aJp": "暑いです。", "hint": "창문을 열다", "hintJp": "窓を開ける", "bPrefix": "나: ", "answer": "창문을 열지 그래요?", "bJp": "窓を開けたらどうですか？", "id": "q2"}, {"lang": "kr", "a": "가: 몸이 아파요.", "aJp": "体が痛いです。", "hint": "병원에 가다", "hintJp": "病院に行く", "bPrefix": "나: ", "answer": "병원에 가지 그래요?", "bJp": "病院に行ったらどうですか？", "id": "q3"}, {"lang": "kr", "a": "가: 감기에 걸린 것 같아요.", "aJp": "風邪をひいたようです。", "hint": "약을 먹다", "hintJp": "薬を飲む", "bPrefix": "나: ", "answer": "약을 먹지 그래요?", "bJp": "薬を飲んだらどうですか？", "id": "q4"}, {"lang": "kr", "a": "가: 휴대 전화가 고장나서 버렸어요.", "aJp": "携帯電話が壊れたので捨てました。", "hint": "고쳐서 쓰다", "hintJp": "直して使う", "bPrefix": "나: ", "answer": "고쳐서 쓰지 그랬어요?", "bJp": "直して使えば良かったのに。", "id": "q5"}, {"lang": "kr", "a": "가: 제 시간에 일을 끝낼 수 없었어요.", "aJp": "時間内に仕事を終えられませんでした。", "hint": "동료에게 도와 달라고 말하다", "hintJp": "同僚に手伝ってと言う", "bPrefix": "나: ", "answer": "동료에게 도와 달라고 말하지 그랬어요?", "bJp": "同僚に手伝ってと言えば良かったのに。", "id": "q6"}]}, {"id": "s56", "title": "練習問題56「〜고도」", "subKr": "~고도（〜しても／〜したのに）", "instruction": "「〜しても」「〜したのに」と、前の行動や状況から予想されることとは違う結果になることを表す「〜고도」の表現です。例のように２つの文をつなげましょう。（単語：상식＝常識）", "example": {"lang": "kr", "a": "친구가 저를 봤다 / 인사도 하지 않았다", "aJp": "友達が私を見た／挨拶もしなかった", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "친구가 저를 보고도 인사도 하지 않았어요.", "bJp": "友達は私を見ても、挨拶もしませんでした。"}, "questions": [{"lang": "kr", "a": "많이 먹었다 / 배가 부르지 않다", "aJp": "たくさん食べた／お腹がいっぱいにならない", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "많이 먹고도 배가 부르지 않아요.", "bJp": "たくさん食べたのに、お腹がいっぱいになりません。", "id": "q1"}, {"lang": "kr", "a": "많이 연습했다 / 실수했다", "aJp": "たくさん練習した／ミスをした", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "많이 연습하고도 실수했어요.", "bJp": "たくさん練習したのに、ミスをしました。", "id": "q2"}, {"lang": "kr", "a": "오늘 만날 약속을 했다 / 친구는 오지 않았다", "aJp": "今日会う約束をした／友達は来なかった", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "오늘 만날 약속을 하고도 친구는 오지 않았어요.", "bJp": "今日会う約束をしたのに、友達は来ませんでした。", "id": "q3"}, {"lang": "kr", "a": "토마스 씨가 하겠다고 했다 / 하지 않았다", "aJp": "トマスさんがやると言った／しなかった", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "토마스 씨가 하겠다고 하고도 하지 않았어요.", "bJp": "トマスさんはやると言ったのに、やりませんでした。", "id": "q4"}, {"lang": "kr", "a": "책을 샀다 / 안 읽었다", "aJp": "本を買った／読まなかった", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "책을 사고도 안 읽었어요.", "bJp": "本を買ったのに、読みませんでした。", "id": "q5"}, {"lang": "kr", "a": "날마다 신문을 읽다 / 상식이 없다", "aJp": "毎日新聞を読む／常識がない", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "날마다 신문을 읽고도 상식이 없어요.", "bJp": "毎日新聞を読んでいるのに、常識がありません。", "id": "q6"}]}, {"id": "s57", "title": "練習問題57「〜는단 말이에요?」", "subKr": "~(ㄴ/는)단 말이에요?（〜ということですか？）", "instruction": "相手の話を聞いて、信じられない気持ちで「〜ということですか？」と再確認する「〜(ㄴ/는)단 말이에요?」の表現です。（　）内の言葉を使って、「나」の返事を作りましょう。", "example": {"lang": "kr", "a": "가: 아까 도서관에 갔는데 빈 자리가 없었어요.", "aJp": "さっき図書館に行ったら、空席がありませんでした。", "hint": "시험도 끝났는데 그렇게 많은 사람들이 공부하다", "hintJp": "試験も終わったのにそんなに多くの人が勉強する", "bPrefix": "나: ", "bAnswer": "시험도 끝났는데 그렇게 많은 사람이 공부한단 말이에요?", "bJp": "試験も終わったのに、そんなにたくさんの人が勉強しているということですか？"}, "questions": [{"lang": "kr", "a": "가: 한국에서 이 소설책을 모르는 사람은 없어요.", "aJp": "韓国でこの小説を知らない人はいません。", "hint": "유명하다", "hintJp": "有名だ", "bPrefix": "나: ", "answer": "그렇게 유명한단 말이에요?", "bJp": "そんなに有名だということですか？", "id": "q1"}, {"lang": "kr", "a": "가: 추워서 죽은 사람도 있대요.", "aJp": "寒くて亡くなった人もいるそうです。", "hint": "춥다", "hintJp": "寒い", "bPrefix": "나: ", "answer": "그렇게 춥단 말이에요?", "bJp": "そんなに寒いということですか？", "id": "q2"}, {"lang": "kr", "a": "가: 그 남자를 생각하면 저는 잠을 잘 수가 없어요.", "aJp": "その男性のことを考えると、私は眠れません。", "hint": "좋아하다", "hintJp": "好きだ", "bPrefix": "나: ", "answer": "그렇게 좋아한단 말이에요?", "bJp": "そんなに好きだということですか？", "id": "q3"}, {"lang": "kr", "a": "가: 이것 보세요. 다 끝났어요.", "aJp": "これを見てください。全部終わりました。", "hint": "이 많은 일을 혼자서 다 했다", "hintJp": "この多くの仕事を一人で全部やった", "bPrefix": "나: ", "answer": "이 많은 일을 혼자서 다 했단 말이에요?", "bJp": "この多くの仕事を一人で全部やったということですか？", "id": "q4"}, {"lang": "kr", "a": "가: 어제 백화점에 갔는데 사람이 너무 많아서 아무것도 사지 않고 그냥 돌아왔어요.", "aJp": "昨日デパートに行ったら、人が多すぎて何も買わずにそのまま帰ってきました。", "hint": "사람이 많았다", "hintJp": "人が多かった", "bPrefix": "나: ", "answer": "그렇게 사람이 많았단 말이에요?", "bJp": "そんなに人が多かったということですか？", "id": "q5"}, {"lang": "kr", "a": "가: 불고기를 5인분이나 먹어 버렸어요.", "aJp": "プルコギを5人前も食べてしまいました。", "hint": "맛있었다", "hintJp": "おいしかった", "bPrefix": "나: ", "answer": "그렇게 맛있었단 말이에요?", "bJp": "そんなにおいしかったということですか？", "id": "q6"}]}, {"id": "s58", "title": "練習問題58「〜(으)면서도」", "subKr": "~(으)면서도（〜ながらも）", "instruction": "「〜でありながらも」「〜なのに」と、前の事柄から当然予想される結果にならないことを表す「〜(으)면서도」の表現です。例のように２つの文をつなげましょう。", "example": {"lang": "kr", "a": "아주 좋아하다 / 싫어한다고 했다", "aJp": "とても好きだ／嫌いだと言った", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "아주 좋아하면서도 싫어한다고 했어요.", "bJp": "とても好きなのに、嫌いだと言いました。"}, "questions": [{"lang": "kr", "a": "서로 사랑하다 / 헤어졌다", "aJp": "お互い愛している／別れた", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "서로 사랑하면서도 헤어졌어요.", "bJp": "お互い愛し合いながらも、別れました。", "id": "q1"}, {"lang": "kr", "a": "돈이 없다 / 자주 한턱내다", "aJp": "お金がない／よくおごる", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "돈이 없으면서도 자주 한턱내요.", "bJp": "お金がないのに、しょっちゅうおごります。", "id": "q2"}, {"lang": "kr", "a": "잘 알다 / 가르쳐 주지 않다", "aJp": "よく知っている／教えてくれない", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "잘 알면서도 가르쳐 주지 않아요.", "bJp": "よく知っているのに、教えてくれません。", "id": "q3"}, {"lang": "kr", "a": "돈이 많다 / 쓰지 않다", "aJp": "お金がたくさんある／使わない", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "돈이 많으면서도 쓰지 않아요.", "bJp": "お金がたくさんあるのに、使いません。", "id": "q4"}, {"lang": "kr", "a": "이 옷은 싸다 / 질이 좋다", "aJp": "この服は安い／質がいい", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "이 옷은 싸면서도 질이 좋아요.", "bJp": "この服は安いのに、質がいいです。", "id": "q5"}, {"lang": "kr", "a": "시험에 떨어졌다 / 공부를 안 하다", "aJp": "試験に落ちた／勉強をしない", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "시험에 떨어졌으면서도 공부를 안 해요.", "bJp": "試験に落ちたのに、勉強をしません。", "id": "q6"}]}, {"id": "s59", "title": "練習問題59「〜도록 하다」", "subKr": "~도록 하다（〜するようにする）", "instruction": "「〜するようにする」という意味の「〜도록 하다」の表現です。（私は）の場合は自分の決意（〜도록 하겠습니다）、（あなたは）の場合は相手への勧め・指示（〜도록 하세요）になります。（　）内の主語に合わせて文を作りましょう。", "example": {"lang": "kr", "a": "(私は) 내일은 일찍 오다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "내일은 일찍 오도록 하겠습니다.", "bJp": "明日は早く来るようにします。"}, "questions": [{"lang": "kr", "a": "(私は) 날마다 공부하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "날마다 공부하도록 하겠습니다.", "bJp": "毎日勉強するようにします。", "id": "q1"}, {"lang": "kr", "a": "(私は) 회의에 늦지 않다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "회의에 늦지 않도록 하겠습니다.", "bJp": "会議に遅れないようにします。", "id": "q2"}, {"lang": "kr", "a": "(私は) 내일까지 이 일을 끝내다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "내일까지 이 일을 끝내도록 하겠습니다.", "bJp": "明日までにこの仕事を終えるようにします。", "id": "q3"}, {"lang": "kr", "a": "(あなたは) 회의에 늦지 않다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "회의에 늦지 않도록 하세요.", "bJp": "会議に遅れないようにしてください。", "id": "q4"}, {"lang": "kr", "a": "(あなたは) 일찍 퇴근하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "일찍 퇴근하도록 하세요.", "bJp": "早く退勤するようにしてください。", "id": "q5"}, {"lang": "kr", "a": "(あなたは) 열심히 연습하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "열심히 연습하도록 하세요.", "bJp": "熱心に練習するようにしてください。", "id": "q6"}]}, {"id": "s60", "title": "練習問題60「어찌나 〜(으)ㄴ/는지」", "subKr": "어찌나 ~(으)ㄴ/는지（どんなに〜なのか）", "instruction": "「どんなに〜なのか（〜だ）」と、程度がとてもすごくて、その結果〜になったことを表す「어찌나 〜(으)ㄴ/는지」の表現です。例のように２つの文をつなげましょう。（「어찌나」の位置は、主語の前でも後ろでもOKです。）（単語：수도＝水道／얼다＝凍る／부르다＝歌う）", "example": {"lang": "kr", "a": "유카 씨가 열심히 공부하다 / 말을 걸지 못했다", "aJp": "ユカさんが熱心に勉強する／声をかけられなかった", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "유카 씨가 어찌나 열심히 공부하는지 말을 걸지 못했어요.", "bJp": "ユカさんがあまりにも一生懸命勉強しているので、声をかけられませんでした。"}, "questions": [{"lang": "kr", "a": "날씨가 춥다 / 수도가 얼었다", "aJp": "天気が寒い／水道が凍った", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "어찌나 날씨가 추운지 수도가 얼었어요.", "bJp": "あまりにも寒くて、水道が凍りました。", "alts": ["날씨가 어찌나 추운지 수도가 얼었어요."], "id": "q1"}, {"lang": "kr", "a": "시험이 어렵다 / 합격한 사람이 없다", "aJp": "試験が難しい／合格した人がいない", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "어찌나 시험이 어려운지 합격한 사람이 없어요.", "bJp": "あまりにも試験が難しくて、合格した人がいません。", "alts": ["시험이 어찌나 어려운지 합격한 사람이 없어요."], "id": "q2"}, {"lang": "kr", "a": "웨이 씨는 노래를 잘 부르다 / 가수인 줄 알았다", "aJp": "ウェイさんは歌が上手だ／歌手だと思った", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "웨이 씨는 어찌나 노래를 잘 부르는지 가수인 줄 알았어요.", "bJp": "ウェイさんはあまりにも歌が上手で、歌手だと思いました。", "alts": ["웨이 씨는 노래를 어찌나 잘 부르는지 가수인 줄 알았어요."], "id": "q3"}, {"lang": "kr", "a": "민수 씨는 잘 생겼다 / 여자에게 인기가 많다", "aJp": "ミンスさんはかっこいい／女性に人気がある", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "민수 씨는 어찌나 잘 생겼는지 여자에게 인기가 많아요.", "bJp": "ミンスさんはあまりにもかっこよくて、女性にとても人気があります。", "id": "q4"}, {"lang": "kr", "a": "웨이 씨가 바빴다 / 연락이 한번도 오지 않았다", "aJp": "ウェイさんが忙しかった／連絡が一度も来なかった", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "웨이 씨가 어찌나 바빴는지 연락이 한번도 오지 않았어요.", "bJp": "ウェイさんはあまりにも忙しかったのか、一度も連絡が来ませんでした。", "id": "q5"}, {"lang": "kr", "a": "맛있다 / 저는 10개나 먹었다", "aJp": "おいしい／私は10個も食べた", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "어찌나 맛있는지 저는 10개나 먹었어요.", "bJp": "あまりにもおいしくて、私は10個も食べました。", "id": "q6"}]}, {"id": "s61", "title": "練習問題61「〜고 말다」", "subKr": "~고 말다（〜してしまう）", "instruction": "「するつもりではなかったことをやってしまった」と、意に反して結果的に〜してしまったことを表す「〜고 말다」の表現です。例のように文を作りましょう。（単語：귀여워하다＝かわいがる／강아지＝子犬／죽다＝死ぬ／지다＝負ける／진학＝進学）", "example": {"lang": "kr", "a": "남자 친구와 헤어졌다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "남자 친구와 헤어지고 말았어요.", "bJp": "彼氏と別れてしまいました。"}, "questions": [{"lang": "kr", "a": "귀여워하던 강아지가 죽다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "귀여워하던 강아지가 죽고 말았어요.", "bJp": "かわいがっていた子犬が死んでしまいました。", "id": "q1"}, {"lang": "kr", "a": "축구 시합에 지다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "축구 시합에 지고 말았어요.", "bJp": "サッカーの試合に負けてしまいました。", "id": "q2"}, {"lang": "kr", "a": "늦잠을 자다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "늦잠을 자고 말았어요.", "bJp": "寝坊してしまいました。", "id": "q3"}, {"lang": "kr", "a": "시험에 떨어지다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "시험에 떨어지고 말았어요.", "bJp": "試験に落ちてしまいました。", "id": "q4"}, {"lang": "kr", "a": "대학 진학을 포기하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "대학 진학을 포기하고 말았어요.", "bJp": "大学進学を諦めてしまいました。", "id": "q5"}]}, {"id": "s62", "title": "練習問題62「〜고는」", "subKr": "~고는（〜してからは）", "instruction": "「〜してからは」と、前の行動をした後で、予想外の行動や状況の変化が起きたことを表す「〜고는」の表現です。例のように２つの文をつなげましょう。", "example": {"lang": "kr", "a": "취직했다 / 만나기가 어려워졌다", "aJp": "就職した／会うのが難しくなった", "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "취직하고는 만나기가 어려워졌어요.", "bJp": "就職してからは、会うのが難しくなりました。"}, "questions": [{"lang": "kr", "a": "책을 샀다 / 한번도 보지 않았다", "aJp": "本を買った／一度も見なかった", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "책을 사고는 한번도 보지 않았어요.", "bJp": "本を買ってからは、一度も見ていません。", "id": "q1"}, {"lang": "kr", "a": "그 친구는 결혼했다 / 한번도 연락을 주지 않았다", "aJp": "その友達は結婚した／一度も連絡をくれなかった", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "그 친구는 결혼하고는 한번도 연락을 주지 않았어요.", "bJp": "その友達は結婚してから、一度も連絡をくれません。", "id": "q2"}, {"lang": "kr", "a": "형이 그 노래를 들었다 / 가수가 되겠다고 하고 있다", "aJp": "兄がその歌を聞いた／歌手になると言っている", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "형이 그 노래를 듣고는 가수가 되겠다고 하고 있어요.", "bJp": "兄はその歌を聞いてから、歌手になると言っています。", "id": "q3"}, {"lang": "kr", "a": "같이 영화를 봤다 / 친구는 바로 집에 돌아갔다", "aJp": "一緒に映画を見た／友達はすぐ家に帰った", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "같이 영화를 보고는 친구는 바로 집에 돌아갔어요.", "bJp": "一緒に映画を見てから、友達はすぐ家に帰りました。", "id": "q4"}, {"lang": "kr", "a": "대학생이 됐다 / 친구가 많아졌다", "aJp": "大学生になった／友達が増えた", "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "대학생이 되고는 친구가 많아졌어요.", "bJp": "大学生になってから、友達が増えました。", "id": "q5"}]}, {"id": "s63", "title": "練習問題63「〜(으)ㄹ지도 모르다」", "subKr": "~(으)ㄹ지도 모르다（〜かもしれない）", "instruction": "推測したものの確信がないときに使う「〜(으)ㄹ지도 모르다（〜かもしれない）」の表現です。例のように文を作りましょう。（単語：상하다＝腐る／퇴근하다＝退社する）", "example": {"lang": "kr", "a": "유카 씨는 집에 있다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "유카 씨는 집에 있을지도 몰라요.", "bJp": "ユカさんは家にいるかもしれません。"}, "questions": [{"lang": "kr", "a": "늦잠을 자다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "늦잠을 잘지도 몰라요.", "bJp": "寝坊するかもしれません。", "id": "q1"}, {"lang": "kr", "a": "시험에 떨어지다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "시험에 떨어질지도 몰라요.", "bJp": "試験に落ちるかもしれません。", "id": "q2"}, {"lang": "kr", "a": "웨이 씨가 도움이 필요하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "웨이 씨가 도움이 필요할지도 몰라요.", "bJp": "ウェイさんは助けが必要かもしれません。", "id": "q3"}, {"lang": "kr", "a": "이 반찬은 상했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "이 반찬은 상했을지도 몰라요.", "bJp": "このおかずは傷んでいるかもしれません。", "id": "q4"}, {"lang": "kr", "a": "과장님이 퇴근했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "과장님이 퇴근했을지도 몰라요.", "bJp": "課長は退社したかもしれません。", "id": "q5"}]}, {"id": "s64", "title": "練習問題64「〜(으)면 되다」", "subKr": "~(으)면 되다（〜すればいい）", "instruction": "「〜すればいい」「〜なら十分だ」と、条件を満たせば十分であることを表す「〜(으)면 되다」の表現です。例のように文を作りましょう。（単語：외롭다＝寂しい）", "example": {"lang": "kr", "a": "여기에 이름을 쓰다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "여기에 이름을 쓰면 돼요.", "bJp": "ここに名前を書けばいいです。"}, "questions": [{"lang": "kr", "a": "여자는 예쁘다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "여자는 예쁘면 돼요.", "bJp": "女性はきれいならいいです。", "id": "q1"}, {"lang": "kr", "a": "남자는 돈이 많다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "남자는 돈이 많으면 돼요.", "bJp": "男性はお金がたくさんあればいいです。", "id": "q2"}, {"lang": "kr", "a": "집은 잘 수 있다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "집은 잘 수 있으면 돼요.", "bJp": "家は寝られればいいです。", "id": "q3"}, {"lang": "kr", "a": "외로울 때는 전화하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "외로울 때는 전화하면 돼요.", "bJp": "寂しいときは電話すればいいです。", "id": "q4"}, {"lang": "kr", "a": "이 약은 하루에 1번 먹다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "이 약은 하루에 1번 먹으면 돼요.", "bJp": "この薬は一日1回飲めばいいです。", "id": "q5"}, {"lang": "kr", "a": "월급이 적어도 일이 재미있다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "월급이 적어도 일이 재미있으면 돼요.", "bJp": "給料が少なくても、仕事が面白ければいいです。", "id": "q6"}, {"lang": "kr", "a": "100점을 못 받아도 합격할 수 있다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "100점을 못 받아도 합격할 수 있으면 돼요.", "bJp": "100点が取れなくても、合格できればいいです。", "id": "q7"}]}, {"id": "s65", "title": "練習問題65「〜(이)라서」", "subKr": "~(이)라서（〜なので）", "instruction": "名詞に付いて「〜なので」と理由・原因を表す「〜(이)라서」の表現です。後ろには命令形や勧誘形は使えません。例のように２つの文をつなげましょう。（単語：한가하다＝暇だ）", "example": {"lang": "kr", "a": "많이 팔리는 책 / 샀다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "많이 팔리는 책이라서 샀어요.", "bJp": "たくさん売れている本なので、買いました。"}, "questions": [{"lang": "kr", "a": "내일은 월요일 / 회사에 가다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "내일은 월요일이라서 회사에 가요.", "bJp": "明日は月曜日なので、会社に行きます。", "id": "q1"}, {"lang": "kr", "a": "여름 방학중 / 한가하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "여름 방학중이라서 한가해요.", "bJp": "夏休み中なので、暇です。", "id": "q2"}, {"lang": "kr", "a": "고등학생 / 술을 마시면 안 되다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "고등학생이라서 술을 마시면 안 돼요.", "bJp": "高校生なので、お酒を飲んではいけません。", "id": "q3"}, {"lang": "kr", "a": "맛있는 밥 / 많이 먹었다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "맛있는 밥이라서 많이 먹었어요.", "bJp": "おいしいご飯なので、たくさん食べました。", "id": "q4"}, {"lang": "kr", "a": "친구 / 도와 줬다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "친구라서 도와 줬어요.", "bJp": "友達なので、助けてあげました。", "id": "q5"}]}, {"id": "s66", "title": "練習問題66「〜기는요」", "subKr": "~기는요（〜だなんて、とんでもない）", "instruction": "相手の言葉を否定したり、謙遜したりするときに使う「〜기는요（〜だなんて、とんでもない／違いますよ）」の表現です。相手の質問や発言に対する「나」の返事を作りましょう。（単語：부인＝奥様／생선회＝刺身）", "example": {"lang": "kr", "a": "가: 요즘 한가하다면서요?", "aJp": "最近暇だそうですね？", "hint": null, "hintJp": null, "bPrefix": "나: ", "bAnswer": "한가하기는요.", "bJp": "暇だなんて、とんでもないです。"}, "questions": [{"lang": "kr", "a": "가: 부인이 예쁘네요.", "aJp": "奥様がおきれいですね。", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "예쁘기는요.", "bJp": "きれいだなんて、とんでもないです。", "id": "q1"}, {"lang": "kr", "a": "가: 한국말이 쉽지요?", "aJp": "韓国語は簡単でしょう？", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "쉽기는요.", "bJp": "簡単だなんて、とんでもないです。", "id": "q2"}, {"lang": "kr", "a": "가: 이 영화가 재미있어요?", "aJp": "この映画は面白いですか？", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "재미있기는요.", "bJp": "面白いだなんて、とんでもないです。", "id": "q3"}, {"lang": "kr", "a": "가: 생선회를 자주 먹어요?", "aJp": "刺身をよく食べますか？", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "자주 먹기는요.", "bJp": "よく食べるだなんて、とんでもないです。", "id": "q4"}, {"lang": "kr", "a": "가: 남자 친구하고 싸웠다면서요?", "aJp": "彼氏とケンカしたそうですね？", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "싸우기는요.", "bJp": "ケンカだなんて、とんでもないです。", "id": "q5"}, {"lang": "kr", "a": "가: 저 사람이 나쁜 사람이에요?", "aJp": "あの人は悪い人ですか？", "hint": null, "hintJp": null, "bPrefix": "나: ", "answer": "나쁜 사람이기는요.", "bJp": "悪い人だなんて、とんでもないです。", "id": "q6"}]}, {"id": "s67", "title": "練習問題67「〜느라고」", "subKr": "~느라고（〜していて）", "instruction": "「〜していて」と、前の行為が原因で、否定的な結果（できなかった・大変だった）になったことを表す「〜느라고」の表現です。命令形・勧誘形は使えず、前後の主語は同じです。例のように２つの文をつなげましょう。（単語：외출＝外出）", "example": {"lang": "kr", "a": "TV를 봤다 / 공부를 못 했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "TV를 보느라고 공부를 못 했어요.", "bJp": "テレビを見ていて、勉強ができませんでした。"}, "questions": [{"lang": "kr", "a": "술을 마셨다 / 연락을 못 했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "술을 마시느라고 연락을 못 했어요.", "bJp": "お酒を飲んでいて、連絡ができませんでした。", "id": "q1"}, {"lang": "kr", "a": "숙제를 했다 / 잠을 못 잤다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "숙제를 하느라고 잠을 못 잤어요.", "bJp": "宿題をしていて、眠れませんでした。", "id": "q2"}, {"lang": "kr", "a": "집에서 친구가 오기를 기다렸다 / 외출하지 못 했다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "집에서 친구가 오기를 기다리느라고 외출하지 못 했어요.", "bJp": "家で友達が来るのを待っていて、外出できませんでした。", "id": "q3"}, {"lang": "kr", "a": "식사를 5인분 준비했다 / 바빴다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "식사를 5인분 준비하느라고 바빴어요.", "bJp": "食事を5人分準備していて、忙しかったです。", "id": "q4"}, {"lang": "kr", "a": "걸어서 왔다 / 시간이 많이 걸렸다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "걸어서 오느라고 시간이 많이 걸렸어요.", "bJp": "歩いて来たので、時間がたくさんかかりました。", "id": "q5"}]}, {"id": "s68", "title": "練習問題68「〜게」", "subKr": "~게（〜するように）", "instruction": "「〜するように」と、後ろの行動の目的や基準を表す「〜게」の表現です。例のように２つの文をつなげましょう。（単語：뛰다＝走る／후회＝後悔／최선＝最善）", "example": {"lang": "kr", "a": "늦지 않다 / 뛰어왔다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "늦지 않게 뛰어 왔어요.", "bJp": "遅れないように走ってきました。"}, "questions": [{"lang": "kr", "a": "잘 보이다 / 크게 써 주세요.", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "잘 보이게 크게 써 주세요.", "bJp": "よく見えるように、大きく書いてください。", "id": "q1"}, {"lang": "kr", "a": "감기에 걸리지 않다 / 마스크를 썼다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "감기에 걸리지 않게 마스크를 썼어요.", "bJp": "風邪をひかないように、マスクをしました。", "id": "q2"}, {"lang": "kr", "a": "모두가 들을 수 있다 / 큰 소리로 이야기하세요.", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "모두가 들을 수 있게 큰 소리로 이야기하세요.", "bJp": "みんなが聞こえるように、大きな声で話してください。", "id": "q3"}, {"lang": "kr", "a": "후회하지 않다 / 최선을 다 하세요.", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "후회하지 않게 최선을 다 하세요.", "bJp": "後悔しないように、最善を尽くしてください。", "id": "q4"}]}, {"id": "s69", "title": "練習問題69「〜다니」", "subKr": "~다니（〜だなんて）", "instruction": "驚くべき状況を見聞きしたときの表現で、「〜なのに〜だなんて」と、信じられない・驚いた気持ちを表す「〜다니」の表現です。３つの文を１つにつなげましょう。（引用符の中の命令は〜(으)라니、勧誘は〜자니の形にします。）（単語：믿다＝信じる／대단하다＝すばらしい／집안일＝家事／너무하다＝ひどい／모범생＝模範生）", "example": {"lang": "kr", "a": "이렇게 예쁘다 / 남자 / 믿을 수가 없다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "이렇게 예쁜데 남자라니 믿을 수가 없어요.", "bJp": "こんなにきれいなのに男性だなんて、信じられません。"}, "questions": [{"lang": "kr", "a": "그 사람은 대학생으로 보이다 / 50대이다 / 믿을 수가 없다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "그 사람은 대학생으로 보이는데 50대라니 믿을 수가 없어요.", "bJp": "あの人は大学生に見えるのに50代だなんて、信じられません。", "id": "q1"}, {"lang": "kr", "a": "여름이다 / 이렇게 춥다 / 이상하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "여름인데 이렇게 춥다니 이상해요.", "bJp": "夏なのにこんなに寒いなんて、おかしいです。", "id": "q2"}, {"lang": "kr", "a": "휴일이다 / 회사에 가다 / 너무 바쁜가 보다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "휴일인데 회사에 가다니 너무 바쁜가 봐요.", "bJp": "休日なのに会社に行くなんて、とても忙しいみたいです。", "alts": ["휴일인데 회사에 간다니 너무 바쁜가 봐요."], "id": "q3"}, {"lang": "kr", "a": "그 여자는 20대로 보이다 / 대학교를 졸업한 딸이 있다 / 믿을 수 없다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "그 여자는 20대로 보이는데 대학교를 졸업한 딸이 있다니 믿을 수가 없어요.", "bJp": "その女性は20代に見えるのに、大学を卒業した娘がいるなんて信じられません。", "id": "q4"}, {"lang": "kr", "a": "아주 쉬운 시험이다 / 떨어졌다 / 믿을 수가 없다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "아주 쉬운 시험인데 떨어졌다니 믿을 수가 없어요.", "bJp": "とても簡単な試験なのに落ちたなんて、信じられません。", "id": "q5"}, {"lang": "kr", "a": "취직한지 5년밖에 안 됐다 / 과장이 됐다 / 대단하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "취직한지 5년 밖에 안 됐는데 과장이 됐다니 대단해요.", "bJp": "就職してまだ5年しか経っていないのに課長になったなんて、すごいです。", "id": "q6"}, {"lang": "kr", "a": "내일 중요한 시험이 있다 / \"집안일을 하십시오.\" / 우리 어머니는 너무하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "내일 중요한 시험이 있는데 집안일을 하라니 우리 어머니는 너무해요.", "bJp": "明日大事な試験があるのに「家事をしなさい」だなんて、うちの母はひどいです。", "id": "q7"}, {"lang": "kr", "a": "시험이 끝났다 / \"공부합시다.\" / 민수 씨는 정말 모범생이다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "시험이 끝났는데 공부하자니 민수 씨는 정말 모범생이에요.", "bJp": "試験が終わったのに「勉強しましょう」だなんて、ミンスさんは本当に模範生です。", "id": "q8"}]}, {"id": "s70", "title": "練習問題70「〜게 하다」", "subKr": "~게 하다（〜させる）", "instruction": "「〜するようにする、〜させる」と、人に行動をさせたり、ある状態になるようにしたりする「〜게 하다」の表現です。例のように文を作りましょう。（「〜가」「〜를」のどちらも使えるものは、どちらでも正解にしています。）（単語：고양이＝猫）", "example": {"lang": "kr", "a": "어머니 / 아이 / 음식 / 먹다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "어머니가 아이에게 음식을 먹게 해요.", "bJp": "母が子どもに食べ物を食べさせます。"}, "questions": [{"lang": "kr", "a": "시끄러운 아이 / 조용히 하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "시끄러운 아이를 조용히 하게 해요.", "bJp": "うるさい子どもを静かにさせます。", "id": "q1"}, {"lang": "kr", "a": "고양이 / 방 안에 들어오다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "고양이를 방 안에 들어오게 해요.", "bJp": "猫を部屋の中に入れます（入って来られるようにします）。", "alts": ["고양이가 방 안에 들어오게 해요."], "id": "q2"}, {"lang": "kr", "a": "후배 / 편하게 말할 수 있다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "후배가 편하게 말할 수 있게 해요.", "bJp": "後輩が気軽に話せるようにします。", "id": "q3"}, {"lang": "kr", "a": "고양이 / 방 안에 들어오지 못하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "고양이를 방 안에 들어오지 못하게 해요.", "bJp": "猫を部屋の中に入れないようにします。", "alts": ["고양이가 방 안에 들어오지 못하게 해요."], "id": "q4"}]}, {"id": "s71", "title": "練習問題71「〜는다지요?」", "subKr": "~(ㄴ/는)다지요?（〜だそうですね？）", "instruction": "他の人から聞いたことを「〜だそうですね？」と確認するように尋ねる「〜(ㄴ/는)다지요?」の表現です（名詞は〜(이)라지요、命令は〜(으)라지요、勧誘は〜자지요）。（　）内の言葉を使って、「나」の返事を作りましょう。（単語：수석＝首席）", "example": {"lang": "kr", "a": "가: 저 학원은 대학교 입학 시험 합격률이 아주 높대요.", "aJp": "あの塾は大学入試の合格率がとても高いそうです。", "hint": "많은 고등 학생들이 다니다", "hintJp": "多くの高校生が通う", "bPrefix": "나: ", "bAnswer": "그래서 많은 고등 학생들이 다닌다지요?", "bJp": "だから、多くの高校生が通っているそうですね？"}, "questions": [{"lang": "kr", "a": "가: 저 식당 정말 맛있어요.", "aJp": "あの食堂は本当においしいです。", "hint": "항상 손님이 많다", "hintJp": "いつもお客さんが多い", "bPrefix": "나: ", "answer": "그래서 항상 손님이 많다지요?", "bJp": "だから、いつもお客さんが多いそうですね？", "id": "q1"}, {"lang": "kr", "a": "가: 웨이 씨는 정말 멋있네요.", "aJp": "ウェイさんは本当に素敵ですね。", "hint": "여학생한테서 고백을 자주 받다", "hintJp": "女子学生からよく告白される", "bPrefix": "나: ", "answer": "그래서 여학생한테서 고백을 자주 받는다지요?", "bJp": "だから、女子学生からよく告白されるそうですね？", "id": "q2"}, {"lang": "kr", "a": "가: 교장 선생님 아들이 정말 똑똑하네요.", "aJp": "校長先生の息子さんは本当に賢いですね。", "hint": "이번에 수석 졸업을 했다", "hintJp": "今回首席で卒業した", "bPrefix": "나: ", "answer": "그래서 이번에 수석 졸업을 했다지요?", "bJp": "だから、今回首席で卒業したそうですね？", "id": "q3"}, {"lang": "kr", "a": "가: 어릴 때 많이 고생하면 훌륭한 어른이 될 것 같아요.", "aJp": "幼い頃にたくさん苦労すれば、立派な大人になれると思います。", "hint": "어릴 때는 고생을 많이 하십시오.", "hintJp": "幼い頃は苦労をたくさんしなさい", "bPrefix": "나: ", "answer": "그래서 어릴 때는 고생을 많이 하라지요?", "bJp": "だから、幼い頃は苦労をたくさんしなさいと言うそうですね？", "id": "q4"}, {"lang": "kr", "a": "가: 역시 친구가 최고네요.", "aJp": "やはり友達は最高ですね。", "hint": "서로 도와 가면서 삽시다.", "hintJp": "お互い助け合いながら生きましょう", "bPrefix": "나: ", "answer": "그래서 서로 도와 가면서 살자지요?", "bJp": "だから、お互い助け合って生きようと言うそうですね？", "id": "q5"}, {"lang": "kr", "a": "가: 전철을 이용하는 사람이 많네요.", "aJp": "電車を利用する人が多いですね。", "hint": "출퇴근 시간에는 만원이다", "hintJp": "通勤時間帯は満員だ", "bPrefix": "나: ", "answer": "그래서 출퇴근 시간에는 만원이라지요?", "bJp": "だから、通勤時間帯は満員だそうですね？", "id": "q6"}]}, {"id": "s72", "title": "練習問題72「〜(으)ㄹ 건가요?」", "subKr": "~(으)ㄹ 건가요?（〜するのですか？）", "instruction": "相手の計画や予定を確認するように「〜するのですか？」と尋ねる表現です（「〜(으)ㄹ 거예요?」より親しみのある聞き方です）。例のように文を作りましょう。（単語：해결＝解決）", "example": {"lang": "kr", "a": "내일 어디에 가다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "내일 어디에 갈 건가요?", "bJp": "明日どこに行くのですか？"}, "questions": [{"lang": "kr", "a": "생일 파티에 누구를 초대하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "생일 파티에 누구를 초대할 건가요?", "bJp": "誕生日パーティーに誰を招待するのですか？", "id": "q1"}, {"lang": "kr", "a": "이 문제를 어떻게 해결하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "이 문제를 어떻게 해결할 건가요?", "bJp": "この問題をどうやって解決するのですか？", "id": "q2"}, {"lang": "kr", "a": "고등 학교를 졸업 후 취직하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "고등 학교를 졸업 후 취직할 건가요?", "bJp": "高校を卒業後、就職するのですか？", "id": "q3"}, {"lang": "kr", "a": "이 사실을 언제 이야기하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "이 사실을 언제 이야기할 건가요?", "bJp": "この事実をいつ話すのですか？", "id": "q4"}, {"lang": "kr", "a": "혼자서 하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "혼자서 할 건가요?", "bJp": "一人でやるのですか？", "id": "q5"}]}, {"id": "s73", "title": "練習問題73「〜다가도」", "subKr": "~다가도（〜していても）", "instruction": "「〜していても（すぐに〜になる）」と、ある行動や状態の途中でも、別の行為や状況によって簡単に変わってしまうことを表す表現です。３つの文を１つにつなげましょう。（単語：장난감＝おもちゃ／그치다＝止む／입맛＝食欲）", "example": {"lang": "kr", "a": "학생들이 떠들다 / 선생님이 오다 / 조용해지다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "학생들이 떠들다가도 선생님이 오면 조용해져요.", "bJp": "生徒たちは騒いでいても、先生が来ると静かになります。"}, "questions": [{"lang": "kr", "a": "아이들이 울다 / 장난감을 보다 / 울음을 그치다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "아이들이 울다가도 장난감을 보면 울음을 그쳐요.", "bJp": "子どもたちは泣いていても、おもちゃを見ると泣き止みます。", "id": "q1"}, {"lang": "kr", "a": "공부하다 / 문제가 좀 어렵다 / 자다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "공부하다가도 문제가 좀 어려우면 자요.", "bJp": "勉強していても、問題が少し難しいと寝てしまいます。", "id": "q2"}, {"lang": "kr", "a": "뭐든지 잘 먹다 / 시험 때가 되다 / 입맛이 없어지다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "뭐든지 잘 먹다가도 시험 때가 되면 입맛이 없어져요.", "bJp": "何でもよく食べていても、試験の時期になると食欲がなくなります。", "id": "q3"}, {"lang": "kr", "a": "기분이 나쁘다 / 좋아하는 가수가 TV에 나오다 / 기분이 좋아지다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "기분이 나쁘다가도 좋아하는 가수가 TV에 나오면 기분이 좋아져요.", "bJp": "気分が悪くても、好きな歌手がテレビに出ると気分が良くなります。", "id": "q4"}, {"lang": "kr", "a": "인기가 많다 / 말 실수를 하다 / 인기는 없어지다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "인기가 많다가도 말 실수를 하면 인기는 없어져요.", "bJp": "人気があっても、失言をすると人気はなくなります。", "id": "q5"}]}, {"id": "s74", "title": "練習問題74「〜곤 하다」", "subKr": "~곤 하다（よく〜する）", "instruction": "「習慣的によく行う」ことを表す「〜곤 하다」の表現です（〜したものだ）。例のように文を作りましょう。", "example": {"lang": "kr", "a": "시험 전에는 밤을 새우다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "시험 전에는 밤을 새우곤 해요.", "bJp": "試験前にはよく徹夜します。"}, "questions": [{"lang": "kr", "a": "회사 일이 바쁠 때는 밤을 새우다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "회사 일이 바쁠 때는 밤을 새우곤 해요.", "bJp": "会社の仕事が忙しいときは、よく徹夜します。", "id": "q1"}, {"lang": "kr", "a": "시간이 있을 때는 노래방에 가다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "시간이 있을 때는 노래방에 가곤 해요.", "bJp": "時間があるときは、よくカラオケに行きます。", "id": "q2"}, {"lang": "kr", "a": "아이 때는 산에서 놀았다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "아이 때는 산에서 놀곤 했어요.", "bJp": "子どもの頃は、よく山で遊んだものです。", "id": "q3"}, {"lang": "kr", "a": "학생 시절에는 선생님께 칭찬을 받았다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "학생 시절에는 선생님께 칭찬을 받곤 했어요.", "bJp": "学生時代は、よく先生に褒められたものです。", "id": "q4"}, {"lang": "kr", "a": "고등 학생 때 테니스를 쳤다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "고등 학생 때 테니스를 치곤 했어요.", "bJp": "高校生の頃は、よくテニスをしたものです。", "id": "q5"}]}, {"id": "s75", "title": "練習問題75「〜만 해도」", "subKr": "~만 해도（〜だけでも／〜でさえ）", "instruction": "「〜だけをとってみても、今とは大きく変わった」と、少し前の状態と今の状況が大きく違うことを表す「〜만 해도」の表現です。例のように文をつなげましょう。", "example": {"lang": "kr", "a": "1년 전 / 가나다라도 몰랐다 / 이제는 한국말을 잘 하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "1년 전만 해도 가나다라도 몰랐는데 이제는 한국말을 잘 해요.", "bJp": "1年前までは「ガナダラ」も知らなかったのに、今は韓国語が上手です。"}, "questions": [{"lang": "kr", "a": "(친구가) 조금 전 / 여기에 있었다 / 지금 어디에 있는지 모르다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "친구가 조금 전만 해도 여기에 있었는데 지금 어디에 있는지 몰라요.", "bJp": "友達はついさっきまでここにいたのに、今どこにいるのか分かりません。", "id": "q1"}, {"lang": "kr", "a": "(여기에는) 1년 전 / 편의점이 있었다 / 지금은 큰 빌딩이 있다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "여기에는 1년 전만 해도 편의점이 있었는데 지금은 큰 빌딩이 있어요.", "bJp": "ここには1年前までコンビニがあったのに、今は大きなビルがあります。", "id": "q2"}, {"lang": "kr", "a": "(할머니는) 얼마 전 / 건강했다 / 요즘은 건강이 안 좋으시다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "할머니는 얼마 전만 해도 건강했는데 요즘은 건강이 안 좋으세요.", "bJp": "祖母は少し前まで元気だったのに、最近は体調が良くありません。", "id": "q3"}, {"lang": "kr", "a": "어제 / 따뜻했다 / 오늘은 눈이 오다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "어제만 해도 따뜻했는데 오늘은 눈이 와요.", "bJp": "昨日は暖かかったのに、今日は雪が降ります。", "id": "q4"}, {"lang": "kr", "a": "(우리 아이는) 몇 년전 / 아기였다 / 벌써 중학생이 됐다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "우리 아이는 몇 년 전만 해도 아기였는데 벌써 중학생이 됐어요.", "bJp": "うちの子は数年前までは赤ちゃんだったのに、もう中学生になりました。", "id": "q5"}]}, {"id": "s76", "title": "練習問題76「〜는다고 할 수 있다」", "subKr": "~(ㄴ/는)다고 할 수 있다（〜と言える）", "instruction": "「〜だと言える」と、断定しすぎずに述べる「〜(ㄴ/는)다고 할 수 있다」の表現です（名詞は〜(이)라고 할 수 있다）。例のように文を作りましょう。（単語：사건＝事件）", "example": {"lang": "kr", "a": "그 두 분은 부부이다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "그 두 분은 부부라고 할 수 있어요.", "bJp": "その二人は夫婦と言えます。"}, "questions": [{"lang": "kr", "a": "책이 제 선생님이다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "책이 제 선생님이라고 할 수 있어요.", "bJp": "本が私の先生だと言えます。", "id": "q1"}, {"lang": "kr", "a": "그 부부는 사이가 좋다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "그 부부는 사이가 좋다고 할 수 있어요.", "bJp": "その夫婦は仲が良いと言えます。", "id": "q2"}, {"lang": "kr", "a": "토마스 씨는 세상에서 제일 멋있다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "토마스 씨는 세상에서 제일 멋있다고 할 수 있어요.", "bJp": "トマスさんは世界で一番かっこいいと言えます。", "id": "q3"}, {"lang": "kr", "a": "민수 씨는 누구보다 열심히 공부하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "민수 씨는 누구보다 열심히 공부한다고 할 수 있어요.", "bJp": "ミンスさんは誰よりも熱心に勉強していると言えます。", "id": "q4"}, {"lang": "kr", "a": "한국 사람은 날마다 김치를 먹다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "한국 사람은 날마다 김치를 먹는다고 할 수 있어요.", "bJp": "韓国人は毎日キムチを食べると言えます。", "id": "q5"}, {"lang": "kr", "a": "그 사람 때문에 사건이 일어났다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "그 사람 때문에 사건이 일어났다고 할 수 있어요.", "bJp": "その人のせいで事件が起きたと言えます。", "id": "q6"}]}, {"id": "s77", "title": "練習問題77「〜었을 거예요」", "subKr": "~었을 거예요（〜だったでしょう）", "instruction": "過去のことについて「〜だったでしょう」と推測する「〜았/었을 거예요」の表現です。（　）内の言葉を使って、「나」の返事を作りましょう。", "example": {"lang": "kr", "a": "가: 김 과장님이 아직 회사에 있을까요?", "aJp": "金課長はまだ会社にいるでしょうか？", "hint": "벌써 퇴근했다", "hintJp": "もう退社した", "bPrefix": "나: 아니요, ", "bAnswer": "벌써 퇴근했을 거예요.", "bJp": "いいえ、もう退社したでしょう。"}, "questions": [{"lang": "kr", "a": "가: 토마스 씨는 어제 파티를 즐거워했을까요?", "aJp": "トマスさんは昨日パーティーを楽しんだでしょうか？", "hint": "즐거워했다", "hintJp": "楽しんだ", "bPrefix": "나: 네, ", "answer": "즐거워했을 거예요.", "bJp": "はい、楽しんだでしょう。", "id": "q1"}, {"lang": "kr", "a": "가: 유카 씨는 어렸을 때 어땠을까요?", "aJp": "ユカさんは幼い頃どうだったでしょうか？", "hint": "귀여웠다", "hintJp": "かわいかった", "bPrefix": "나: ", "answer": "귀여웠을 거예요.", "bJp": "かわいかったでしょう。", "id": "q2"}, {"lang": "kr", "a": "가: 유카 씨는 누구하고 갔을까요?", "aJp": "ユカさんは誰と行ったでしょうか？", "hint": "리카 씨", "hintJp": "リカさん", "bPrefix": "나: ", "answer": "리카 씨하고 갔을 거예요.", "bJp": "リカさんと行ったでしょう。", "id": "q3"}, {"lang": "kr", "a": "가: 어제 손님이 많았을까요?", "aJp": "昨日はお客さんが多かったでしょうか？", "hint": "많았다", "hintJp": "多かった", "bPrefix": "나: 네, ", "answer": "많았을 거예요.", "bJp": "はい、多かったでしょう。", "id": "q4"}, {"lang": "kr", "a": "가: 비행기가 벌써 도착했을까요?", "aJp": "飛行機はもう到着したでしょうか？", "hint": "도착하지 않았다", "hintJp": "到着していない", "bPrefix": "나: 아니요, ", "answer": "아직 도착하지 않았을 거예요.", "bJp": "いいえ、まだ到着していないでしょう。", "id": "q5"}]}, {"id": "s78", "title": "練習問題78「〜었다면」", "subKr": "~었(았,였)다면（〜だったら）", "instruction": "過去の事実とは違うことを仮定して「〜だったら」と言う「〜았/었다면」の表現です。例のように、前半を「〜았/었다면」の形にして文を作りましょう。（単語：농구＝バスケットボール／선수＝選手／미리＝あらかじめ／실수하다＝ミスする）", "example": {"lang": "kr", "a": "그 때 용서하다 / 지금도 사이 좋게 지냈을 텐데.", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "그 때 용서했다면 지금도 사이 좋게 지냈을 텐데.", "bJp": "あの時許していたら、今も仲良く過ごしていただろうに。"}, "questions": [{"lang": "kr", "a": "키가 더 크다 / 농구 선수가 됐을 거예요.", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "키가 더 컸다면 농구 선수가 됐을 거예요.", "bJp": "もっと背が高かったら、バスケットボール選手になっていたでしょう。", "id": "q1"}, {"lang": "kr", "a": "그 사람하고 결혼하다 / 행복하게 살았을 거예요.", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "그 사람하고 결혼했다면 행복하게 살았을 거예요.", "bJp": "その人と結婚していたら、幸せに暮らしていたでしょう。", "id": "q2"}, {"lang": "kr", "a": "비가 오다 / 운동회는 하지 못했을 거예요.", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "비가 왔다면 운동회는 하지 못했을 거예요.", "bJp": "雨が降っていたら、運動会はできなかったでしょう。", "id": "q3"}, {"lang": "kr", "a": "그 사람을 만나지 않았다 / 어떻게 살았을까?", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "그 사람을 만나지 않았다면 어떻게 살았을까?", "bJp": "その人に会わなかったら、どう暮らしていただろうか？", "id": "q4"}, {"lang": "kr", "a": "미리 그 사실을 알다 / 실수하지 않았을 텐데.", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "미리 그 사실을 알았다면 실수하지 않았을 텐데.", "bJp": "前もってその事実を知っていたら、ミスしなかっただろうに。", "id": "q5"}]}, {"id": "s79", "title": "練習問題79「〜듯이」", "subKr": "~듯이（〜するように）", "instruction": "「〜であるように」「(まるで)〜するように」と、前の内容と後ろの内容が同程度である、または似ていることを表す「〜(ㄴ/는/았/었)듯이」の表現です。例のように２つの文をつなげましょう。（単語：쓰러지다＝倒れる／눕다＝横になる）", "example": {"lang": "kr", "a": "아버지가 우수하다 / 아이들도 우수하다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "bAnswer": "아버지가 우수하듯이 아이들도 우수해요.", "bJp": "父が優秀なように、子どもたちも優秀です。"}, "questions": [{"lang": "kr", "a": "언니가 예쁘다 / 여동생도 예쁘다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "언니가 예쁘듯이 여동생도 예뻐요.", "bJp": "姉がきれいなように、妹もきれいです。", "id": "q1"}, {"lang": "kr", "a": "그 사람이 말하다 / 상황이 좋지 않다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "그 사람이 말하듯이 상황이 좋지 않아요.", "bJp": "その人が言うように、状況は良くありません。", "alts": ["그 사람이 말했듯이 상황이 좋지 않아요."], "id": "q2"}, {"lang": "kr", "a": "쓰러지다 / 침대 위에 누웠다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "쓰러지듯이 침대 위에 누웠어요.", "bJp": "倒れるようにベッドの上に横になりました。", "id": "q3"}, {"lang": "kr", "a": "물을 쓰다 / 돈을 쓰다", "aJp": null, "hint": null, "hintJp": null, "bPrefix": "→ ", "answer": "물을 쓰듯이 돈을 써요.", "bJp": "水を使うようにお金を使います。", "id": "q4"}]}, {"id": "s80", "title": "練習問題80「〜은/는 물론」", "subKr": "~은/는 물론（〜はもちろん）", "instruction": "「〜はもちろん、〜も」と、前のことは当然で、後ろのことも同様であることを表す「〜은/는 물론(이고) 〜도」の表現です。（　）内の言葉を使って、「나」の返事を作りましょう。（単語：인수분해＝因数分解／더하기＝足し算）", "example": {"lang": "kr", "a": "가: 밥 먹으러 갈까요?", "aJp": "ご飯を食べに行きましょうか？", "hint": "밥 / 죽 / 못 먹다", "hintJp": "ご飯／おかゆ／食べられない", "bPrefix": "나: ", "bAnswer": "목이 아파서 밥은 물론 죽도 못 먹어요.", "bJp": "喉が痛くて、ご飯はもちろんおかゆも食べられません。"}, "questions": [{"lang": "kr", "a": "가: 요즘 어른들은 스마트폰을 잘 써요?", "aJp": "最近の大人はスマートフォンをよく使いますか？", "hint": "어른 / 아이들 / 잘 쓰다", "hintJp": "大人／子どもたち／よく使う", "bPrefix": "나: 네, ", "answer": "어른은 물론 아이들도 잘 써요.", "bJp": "はい、大人はもちろん子どもたちも上手に使います。", "id": "q1"}, {"lang": "kr", "a": "가: 인수분해를 잘 해요?", "aJp": "因数分解は得意ですか？", "hint": "인수분해 / 더하기 / 못하다", "hintJp": "因数分解／足し算／できない", "bPrefix": "나: 아니요, ", "answer": "인수분해는 물론 더하기도 못해요.", "bJp": "いいえ、因数分解はもちろん足し算もできません。", "id": "q2"}, {"lang": "kr", "a": "가: 프랑스에 가 봤어요?", "aJp": "フランスに行ったことがありますか？", "hint": "파리 / 프랑스 시골 / 가 봤다", "hintJp": "パリ／フランスの田舎／行ったことがある", "bPrefix": "나: 네, ", "answer": "파리는 물론 프랑스 시골에도 가 봤어요.", "bJp": "はい、パリはもちろんフランスの田舎にも行ったことがあります。", "id": "q3"}, {"lang": "kr", "a": "가: 외국어를 잘 해요?", "aJp": "外国語が得意ですか？", "hint": "영어 / 러시아어 / 잘 하다", "hintJp": "英語／ロシア語／上手だ", "bPrefix": "나: 네, ", "answer": "영어는 물론 러시아어도 잘 해요.", "bJp": "はい、英語はもちろんロシア語も上手です。", "id": "q4"}, {"lang": "kr", "a": "가: 한국 음식을 좋아해요?", "aJp": "韓国料理は好きですか？", "hint": "비빔밥 / 매운 음식 / 좋아하다", "hintJp": "ビビンバ／辛い料理／好きだ", "bPrefix": "나: 네, ", "answer": "비빔밥은 물론 매운 음식도 좋아해요.", "bJp": "はい、ビビンバはもちろん辛い料理も好きです。", "id": "q5"}]}];
+
+var state = { sessions:{}, reviewSet:{}, lastLevel:1, currentSessionId: SESSIONS[0].id };
+SESSIONS.forEach(function(s){
+  state.sessions[s.id] = {answers:{}, checked:{}, revealed:{}};
+  s.questions.forEach(function(q){
+    state.sessions[s.id].answers[q.id] = "";
+    state.sessions[s.id].checked[q.id] = null;
+    state.sessions[s.id].revealed[q.id] = false;
+  });
+});
+
+/* ===== STORAGE ===== */
+var STORAGE_KEY = "korean-quest-progress-v2";
+var APP_ID = "korean-quest-2-progress";
+var saveTimer = null, storageAvailable = true;
+function scheduleSave(){ clearTimeout(saveTimer); saveTimer = setTimeout(save, 250); }
+function save(){
+  if(!storageAvailable) return;
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({sessions:state.sessions, reviewSet:state.reviewSet, lastLevel:state.lastLevel, currentSessionId:state.currentSessionId}));
+  }catch(e){ console.error("save failed", e); }
+}
+function mergeSaved(data){
+  if(data.sessions){
+    Object.keys(data.sessions).forEach(function(sid){
+      if(state.sessions[sid]){
+        var saved = data.sessions[sid];
+        Object.assign(state.sessions[sid].answers, saved.answers||{});
+        Object.assign(state.sessions[sid].checked, saved.checked||{});
+        Object.assign(state.sessions[sid].revealed, saved.revealed||{});
+      }
+    });
+  }
+  if(data.reviewSet) state.reviewSet = data.reviewSet;
+  if(data.lastLevel) state.lastLevel = data.lastLevel;
+  if(data.currentSessionId && state.sessions[data.currentSessionId]) state.currentSessionId = data.currentSessionId;
+}
+function load(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) mergeSaved(JSON.parse(raw));
+  }catch(e){ storageAvailable = false; console.error("load failed", e); }
+}
+
+/* ===== EXPORT / IMPORT ===== */
+function buildExportPayload(){
+  return JSON.stringify({app:APP_ID, version:1, exportedAt:new Date().toISOString(),
+    sessions:state.sessions, reviewSet:state.reviewSet, lastLevel:state.lastLevel, currentSessionId:state.currentSessionId}, null, 2);
+}
+function applyImportedData(data){
+  var fresh = {};
+  SESSIONS.forEach(function(s){
+    fresh[s.id] = {answers:{}, checked:{}, revealed:{}};
+    s.questions.forEach(function(q){ fresh[s.id].answers[q.id]=""; fresh[s.id].checked[q.id]=null; fresh[s.id].revealed[q.id]=false; });
+  });
+  state.sessions = fresh; state.reviewSet = {}; state.lastLevel = 1;
+  mergeSaved(data);
+  save(); renderAll();
+}
+function importDataString(str){
+  var statusEl = document.getElementById("dataStatusMsg");
+  try{
+    var data = JSON.parse(str);
+    if(!data || typeof data !== "object" || !data.sessions) throw new Error("invalid shape");
+    if(data.app !== APP_ID) throw new Error("wrong app");
+    applyImportedData(data);
+    statusEl.textContent = "✅ 読み込みが完了しました。";
+    statusEl.className = "data-status ok";
+    document.getElementById("importTextarea").classList.add("hidden");
+    document.getElementById("importConfirmRow").classList.add("hidden");
+  }catch(e){
+    statusEl.textContent = "❌ 読み込みに失敗しました。中級編２のバックアップファイル・テキストか確認してください。";
+    statusEl.className = "data-status err";
+  }
+}
+
+/* ===== REVIEW LIST ===== */
+function reviewKey(sid, qid){ return sid+"|"+qid; }
+function isInReview(sid, qid){ return !!state.reviewSet[reviewKey(sid,qid)]; }
+function toggleReviewItem(sid, qid){
+  var key = reviewKey(sid, qid);
+  if(state.reviewSet[key]) delete state.reviewSet[key]; else state.reviewSet[key] = true;
+  scheduleSave();
+}
+function reviewEntries(){
+  var out = [];
+  Object.keys(state.reviewSet).forEach(function(key){
+    if(!state.reviewSet[key]) return;
+    var idx = key.indexOf("|"), sid = key.slice(0, idx), qid = key.slice(idx+1);
+    var s = getSession(sid); if(!s) return;
+    var q = s.questions.find(function(x){ return x.id===qid; }); if(!q) return;
+    out.push({sid:sid, qid:qid, session:s, question:q});
+  });
+  return out;
+}
+function reviewRevealToggle(sid, qid){ var st = state.sessions[sid]; st.revealed[qid] = !st.revealed[qid]; scheduleSave(); renderAll(); }
+function reviewUndo(sid, qid){ delete state.reviewSet[reviewKey(sid,qid)]; scheduleSave(); renderAll(); }
+
+/* ===== HELPERS ===== */
+function normalize(str){ return (str||"").replace(/[\s.!?,~"“”]+/g,"").toLowerCase().trim(); }
+function isAnswerCorrect(q, userVal){
+  var u = normalize(userVal);
+  if(u==="") return false;
+  if(u === normalize(q.answer)) return true;
+  if(q.alts){ for(var i=0;i<q.alts.length;i++){ if(u === normalize(q.alts[i])) return true; } }
+  return false;
+}
+var DIFF_STRIP_RE = /[\s.!?,~]/;
+var DIFF_RATIO_THRESHOLD = 0.3;
+function normalizeWithMap(str){
+  str = str || ""; var norm = "", map = [];
+  for(var i=0;i<str.length;i++){ var ch = str[i]; if(DIFF_STRIP_RE.test(ch)) continue; norm += ch; map.push(i); }
+  return {norm:norm, map:map};
+}
+function lcsMatchMask(a, b){
+  var n = a.length, m = b.length, dp = new Array(n+1), i, j;
+  for(i=0;i<=n;i++) dp[i] = new Array(m+1).fill(0);
+  for(i=n-1;i>=0;i--) for(j=m-1;j>=0;j--) dp[i][j] = (a[i]===b[j]) ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j], dp[i][j+1]);
+  var mask = new Array(n).fill(false); i=0; j=0;
+  while(i<n && j<m){
+    if(a[i]===b[j]){ mask[i]=true; i++; j++; }
+    else if(dp[i+1][j] >= dp[i][j+1]) i++; else j++;
+  }
+  return {mask:mask, lcsLen:dp[0][0]};
+}
+function bestReference(q, userRaw){
+  var cands = [q.answer].concat(q.alts||[]), best = q.answer, bestLen = -1;
+  var un = normalizeWithMap(userRaw).norm;
+  cands.forEach(function(c){
+    var cn = normalizeWithMap(c).norm;
+    var l = (un.length && cn.length) ? lcsMatchMask(un, cn).lcsLen : 0;
+    if(l > bestLen){ bestLen = l; best = c; }
+  });
+  return best;
+}
+function buildAnswerDiffHtml(userRaw, q){
+  userRaw = userRaw || "";
+  if(userRaw.trim()==="") return '<span class="diff-empty">（未回答）</span>';
+  var correctRaw = bestReference(q, userRaw);
+  var un = normalizeWithMap(userRaw), cn = normalizeWithMap(correctRaw), ratio, result;
+  if(un.norm.length===0 || cn.norm.length===0){ ratio = 0; result = {mask:new Array(un.norm.length).fill(false), lcsLen:0}; }
+  else { result = lcsMatchMask(un.norm, cn.norm); ratio = result.lcsLen / cn.norm.length; }
+  if(ratio < DIFF_RATIO_THRESHOLD) return '<span class="diff-allwrong">'+escapeHtml(userRaw)+'</span>';
+  var wrongAt = {};
+  for(var k=0;k<un.map.length;k++){ if(!result.mask[k]) wrongAt[un.map[k]] = true; }
+  var html = "";
+  for(var idx=0; idx<userRaw.length; idx++){
+    var ch = escapeHtml(userRaw[idx]);
+    html += wrongAt[idx] ? ('<span class="diff-wrong">'+ch+'</span>') : ch;
+  }
+  return html;
+}
+function triangular(n){ return n*(n+1)/2; }
+function levelFromCorrect(c){ var lvl = 1; for(var L=1; L<=50; L++){ if(c >= triangular(L-1)) lvl = L; else break; } return lvl; }
+function correctNeededForNext(c, level){ if(level>=50) return null; return triangular(level) - c; }
+function emblemForLevel(level){ for(var i=0;i<EMBLEMS.length;i++){ if(level<=EMBLEMS[i].max) return EMBLEMS[i].icon; } return "👑"; }
+function colorForLevel(level){
+  var hue = (level*137.508) % 360, sat = Math.min(85, 45 + level*0.8);
+  var l1 = Math.max(22, 34 - level*0.15), l2 = Math.max(14, 22 - level*0.15);
+  return ["hsl("+hue.toFixed(0)+","+sat.toFixed(0)+"%,"+l1.toFixed(0)+"%)", "hsl("+hue.toFixed(0)+","+sat.toFixed(0)+"%,"+l2.toFixed(0)+"%)"];
+}
+function totalCorrectCount(){ var n=0; SESSIONS.forEach(function(s){ var st = state.sessions[s.id]; s.questions.forEach(function(q){ if(st.checked[q.id]===true) n++; }); }); return n; }
+function totalQuestionCount(){ var n=0; SESSIONS.forEach(function(s){ n+=s.questions.length; }); return n; }
+function getSession(sid){ return SESSIONS.find(function(x){return x.id===sid;}); }
+function sessionCorrectCount(sid){ var s = getSession(sid), st = state.sessions[sid], n=0; s.questions.forEach(function(q){ if(st.checked[q.id]===true) n++; }); return n; }
+function sessionAttemptedCount(sid){ var s = getSession(sid), st = state.sessions[sid], n=0; s.questions.forEach(function(q){ if(st.checked[q.id]!==null) n++; }); return n; }
+function sessionStatus(sid){
+  var s = getSession(sid), c = sessionCorrectCount(sid), a = sessionAttemptedCount(sid);
+  if(a===0) return "untouched"; if(c===s.questions.length) return "complete"; return "progress";
+}
+
+/* ===== AUDIO ===== */
+var audioCtx = null;
+function runWithAudioCtx(fn){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    var ctx = audioCtx;
+    if(ctx.state === "suspended"){ ctx.resume().then(function(){ fn(ctx); }).catch(function(){}); } else { fn(ctx); }
+  }catch(e){}
+}
+function playFanfare(){
+  runWithAudioCtx(function(ctx){
+    var notes = [523.25, 659.25, 783.99, 1046.50], t0 = ctx.currentTime;
+    notes.forEach(function(freq, i){
+      var osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = "triangle"; osc.frequency.value = freq;
+      var start = t0 + i*0.11, dur = 0.32;
+      gain.gain.setValueAtTime(0, start); gain.gain.linearRampToValueAtTime(0.22, start+0.02); gain.gain.exponentialRampToValueAtTime(0.001, start+dur);
+      osc.connect(gain).connect(ctx.destination); osc.start(start); osc.stop(start+dur+0.02);
+    });
+  });
+}
+function playCorrectChime(){
+  runWithAudioCtx(function(ctx){
+    var t0 = ctx.currentTime;
+    [{freq:987.77, start:0, dur:0.16},{freq:783.99, start:0.15, dur:0.36}].forEach(function(n){
+      var osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = "sine"; osc.frequency.value = n.freq;
+      var start = t0 + n.start;
+      gain.gain.setValueAtTime(0, start); gain.gain.linearRampToValueAtTime(0.28, start+0.015); gain.gain.exponentialRampToValueAtTime(0.001, start+n.dur);
+      osc.connect(gain).connect(ctx.destination); osc.start(start); osc.stop(start+n.dur+0.02);
+    });
+  });
+}
+function playWrongBuzz(){
+  runWithAudioCtx(function(ctx){
+    var t0 = ctx.currentTime, osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = "sawtooth"; osc.frequency.setValueAtTime(180, t0); osc.frequency.exponentialRampToValueAtTime(90, t0+0.16);
+    gain.gain.setValueAtTime(0, t0); gain.gain.linearRampToValueAtTime(0.22, t0+0.01); gain.gain.exponentialRampToValueAtTime(0.001, t0+0.18);
+    osc.connect(gain).connect(ctx.destination); osc.start(t0); osc.stop(t0+0.2);
+  });
+}
+
+/* ===== SPEECH SYNTHESIS ===== */
+var koVoice = null;
+function pickKoreanVoice(){
+  if(!("speechSynthesis" in window)) return null;
+  var voices = window.speechSynthesis.getVoices();
+  if(!voices || !voices.length) return null;
+  return voices.find(function(v){ return v.lang === "ko-KR"; }) || voices.find(function(v){ return /^ko/i.test(v.lang); }) || null;
+}
+if("speechSynthesis" in window){
+  koVoice = pickKoreanVoice();
+  window.speechSynthesis.onvoiceschanged = function(){ koVoice = pickKoreanVoice(); };
+}
+function speakKorean(text, btn){
+  if(!text) return;
+  if(!("speechSynthesis" in window)){ if(btn){ btn.disabled = true; btn.title = "この端末は音声読み上げに対応していません"; } return; }
+  try{
+    window.speechSynthesis.cancel();
+    var utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "ko-KR";
+    if(!koVoice) koVoice = pickKoreanVoice();
+    if(koVoice) utter.voice = koVoice;
+    utter.rate = 0.9;
+    if(btn){
+      utter.onstart = function(){ btn.classList.add("speaking"); };
+      utter.onend = function(){ btn.classList.remove("speaking"); };
+      utter.onerror = function(){ btn.classList.remove("speaking"); };
+    }
+    window.speechSynthesis.speak(utter);
+  }catch(e){}
+}
+function escapeHtml(str){
+  return (str||"").replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+}
+function escapeAttr(str){ return escapeHtml(str); }
+// 話者ラベル（나: / 리에: / 가: など）と矢印は読み上げない。後ろの韓国語（네, など）は残す。
+function speakableText(prefix, body, after){
+  var p = (prefix||"").replace(/^\s*([^\s:：→]{1,6}\s*[:：]|→)\s*/, "");
+  return (p + (body||"") + (after ? " " + after : "")).trim();
+}
+
+/* ===== RENDER ===== */
+function renderHeader(){
+  var correct = totalCorrectCount(), level = levelFromCorrect(correct), colors = colorForLevel(level);
+  var header = document.getElementById("statusHeader");
+  header.style.background = "linear-gradient(160deg,"+colors[0]+","+colors[1]+")";
+  document.getElementById("levelNumLabel").textContent = "レベル " + level;
+  document.getElementById("levelNameLabel").textContent = LEVEL_NAMES[level-1];
+  document.getElementById("totalScoreLabel").textContent = correct*10;
+  var emblemBox = document.getElementById("emblemBox");
+  emblemBox.textContent = emblemForLevel(level);
+  emblemBox.className = "emblem" + (level>=10 ? " level-glow" : "");
+  var need = correctNeededForNext(correct, level), xpFill = document.getElementById("xpFill");
+  if(need===null){
+    xpFill.style.width = "100%";
+    document.getElementById("xpLabelLeft").textContent = "最高レベルに到達！";
+    document.getElementById("xpLabelRight").textContent = "";
+  } else {
+    var floor = triangular(level-1), span = triangular(level)-floor, progressed = correct-floor;
+    xpFill.style.width = (span>0 ? Math.min(100,(progressed/span)*100) : 100)+"%";
+    document.getElementById("xpLabelLeft").textContent = "次のレベルまで正解 " + need + " 問";
+    document.getElementById("xpLabelRight").textContent = progressed+" / "+span;
+  }
+  var totalQ = totalQuestionCount();
+  document.getElementById("overallCountLabel").textContent = correct + " / " + totalQ + " 問 正解";
+  document.getElementById("overallBarFill").style.width = (totalQ>0 ? (correct/totalQ*100) : 0) + "%";
+  return level;
+}
+function renderLevelRoadmap(currentLevel){
+  var html = "";
+  for(var L=1; L<=50; L++){
+    var cls = "lv-row" + (L < currentLevel ? " done" : L === currentLevel ? " current" : " locked");
+    html += '<div class="'+cls+'"><span class="lv-num">'+L+'</span><span class="lv-name">'+LEVEL_NAMES[L-1]+'</span></div>';
+  }
+  document.getElementById("levelRoadmap").innerHTML = html;
+}
+function renderSessionList(){
+  var html = "";
+  SESSIONS.forEach(function(s){
+    var status = sessionStatus(s.id), correct = sessionCorrectCount(s.id), total = s.questions.length;
+    var badge = status==="complete" ? "★" : status==="progress" ? "…" : "?";
+    var label = status==="complete" ? "全問正解！" : status==="progress" ? "挑戦中" : "未着手";
+    html += '<button type="button" class="session-card status-'+status+'" data-sid="'+s.id+'">'+
+      '<div class="sc-badge">'+badge+'</div><div class="sc-text"><div class="sc-title">'+escapeHtml(s.title)+'</div>'+
+      '<div class="sc-sub kr">'+escapeHtml(s.subKr)+'</div><div class="sc-count">'+label+'　'+correct+' / '+total+' 問</div></div></button>';
+  });
+  document.getElementById("sessionList").innerHTML = html;
+}
+function hintHtml(q){
+  return q.hint ? '<div class="hint-chip kr">ヒント: '+escapeHtml(q.hint)+' <span style="font-weight:400;">（'+escapeHtml(q.hintJp||"")+'）</span></div>' : '';
+}
+function renderQuestionCard(sid, q, idx, review){
+  var st = state.sessions[sid], checked = st.checked[q.id];
+  var markCls = checked===true ? "correct" : checked===false ? "wrong" : "";
+  var markTxt = checked===true ? "○" : checked===false ? "✕" : "";
+  var cardCls = checked===true ? " marked-correct" : checked===false ? " marked-wrong" : "";
+  var revealed = st.revealed[q.id], inRev = isInReview(sid, q.id);
+  var aCls = q.lang==="jp" ? "q-a-line" : "q-a-line kr";
+  var d = review ? ' data-sid="'+sid+'" data-qid="'+q.id+'"' : ' data-qid="'+q.id+'"';
+  var pf = review ? "review-" : "";
+  var s = getSession(sid);
+  return '<div class="q-card'+cardCls+'">'+
+    '<div class="q-top"><div class="q-num">'+(review ? "🔁" : (idx+1))+'</div><div class="q-body">'+
+      (review ? '<div class="review-sess-tag">'+escapeHtml(s.title)+'</div>' : '')+
+      '<div class="'+aCls+'">'+escapeHtml(q.a)+'</div>'+
+      (q.aJp ? '<div class="q-jp">'+escapeHtml(q.aJp)+'</div>' : '')+
+      hintHtml(q)+
+      '<div class="answer-row"><span class="who-prefix kr">'+escapeHtml(q.bPrefix)+'</span>'+
+        '<input type="text" class="ans-input '+(review?'review-ans-input ':'')+'kr"'+d+' placeholder="답을 입력하세요" value="'+escapeAttr(st.answers[q.id]||"")+'" autocapitalize="off" autocomplete="off" spellcheck="false">'+
+        '<button type="button" class="mic-btn '+(review?'review-mic-btn':'')+'"'+d+' title="音声入力で答える">🎤</button>'+
+        '<span class="mark '+markCls+'">'+markTxt+'</span></div>'+
+      (q.after ? '<div class="q-after kr">'+escapeHtml(q.after)+'</div>' : '')+
+      (checked===false ? '<div class="diff-line kr"><div class="diff-line-label">あなたの解答（赤字＝間違い）</div>'+buildAnswerDiffHtml(st.answers[q.id], q)+'</div>' : '')+
+      '<div class="q-actions">'+
+        '<button type="button" class="mini-btn primary '+pf+'check-btn"'+d+'>答え合わせ</button>'+
+        '<button type="button" class="mini-btn '+pf+'reveal-btn'+(revealed?' on':'')+'"'+d+'>'+(revealed?'答えを隠す':'答えを見る')+'</button>'+
+        (review ? '<button type="button" class="mini-btn review-undo-btn"'+d+'>↩️ 元に戻す</button>'
+                : '<button type="button" class="mini-btn review-toggle-btn'+(inRev?' on':'')+'"'+d+'>'+(inRev?'✅ 復習リストに追加済み':'🔁 後で復習')+'</button>')+
+      '</div>'+
+      '<div class="reveal-panel'+(revealed?' open':'')+'" data-reveal-panel="'+q.id+'" data-rsid="'+sid+'"><div class="reveal-inner">'+
+        '<div class="ans-kr-row"><div class="ans-kr kr">'+escapeHtml(q.bPrefix)+escapeHtml(q.answer)+(q.after?' '+escapeHtml(q.after):'')+'</div>'+
+        '<button type="button" class="speak-btn" data-speak="'+escapeAttr(speakableText(q.bPrefix,q.answer,q.after))+'" title="韓国語で読み上げる">🔊</button></div>'+
+        '<div class="ans-jp">訳：'+escapeHtml(q.bJp)+'</div>'+
+      '</div></div>'+
+    '</div></div></div>';
+}
+function renderSessionView(){
+  var sid = state.currentSessionId, s = getSession(sid), view = document.getElementById("sessionView"), qHtml = "";
+  s.questions.forEach(function(q, idx){ qHtml += renderQuestionCard(sid, q, idx, false); });
+  var ex = s.example;
+  view.innerHTML =
+  '<div class="session-header"><h1>'+escapeHtml(s.title)+'</h1><div class="kr-sub kr">'+escapeHtml(s.subKr)+'</div>'+
+    '<div class="instruction">'+escapeHtml(s.instruction)+'</div>'+
+    '<div class="example-card"><div class="example-label">例）EXAMPLE</div>'+
+      '<div class="dialogue-line'+(ex.lang==="jp"?"":" kr")+'">'+escapeHtml(ex.a)+'</div>'+
+      (ex.aJp ? '<div class="q-jp">'+escapeHtml(ex.aJp)+'</div>' : '')+
+      hintHtml(ex)+
+      '<div class="example-answer-row"><div class="dialogue-line kr" style="margin:0;">'+escapeHtml(ex.bPrefix)+escapeHtml(ex.bAnswer)+'</div>'+
+      '<button type="button" class="speak-btn" data-speak="'+escapeAttr(speakableText(ex.bPrefix,ex.bAnswer))+'" title="韓国語で読み上げる">🔊</button></div>'+
+      '<div class="q-jp">'+escapeHtml(ex.bJp)+'</div>'+
+    '</div></div>'+
+  '<div class="toppair"><button type="button" class="bulk-check-btn" id="bulkCheckTop">🗡️ セッション全体を答え合わせ</button></div>'+
+  '<div id="qList">'+qHtml+'</div>'+
+  '<div class="bottompair"><button type="button" class="bulk-check-btn" id="bulkCheckBottom">🗡️ セッション全体を答え合わせ</button></div>'+
+  '<div class="session-reset-wrap"><button type="button" id="sessionResetBtn">このセッションの記録をリセットする</button></div>';
+}
+function renderReviewPanel(){
+  var list = document.getElementById("reviewList"), chip = document.getElementById("reviewCountChip");
+  var entries = reviewEntries();
+  if(chip) chip.textContent = entries.length + " 問";
+  if(entries.length===0){
+    list.innerHTML = '<div class="empty-hint">まだ「後で復習」に追加された問題はありません。各問題の「🔁 後で復習」ボタンを押すと、ここに表示されます。</div>';
+    return;
+  }
+  var html = "";
+  entries.forEach(function(e){ html += renderQuestionCard(e.sid, e.question, 0, true); });
+  list.innerHTML = html;
+}
+function renderAll(){
+  var level = renderHeader();
+  renderLevelRoadmap(level); renderSessionList(); renderSessionView(); renderReviewPanel();
+  state.lastLevel = level;
+}
+
+/* ===== LEVEL UP ===== */
+function checkLevelUp(prev, now){
+  var a = levelFromCorrect(prev), b = levelFromCorrect(now);
+  if(b > a) showLevelUp(a, b);
+}
+function showLevelUp(from, to){
+  document.getElementById("lvupFrom").textContent = LEVEL_NAMES[from-1];
+  document.getElementById("lvupTo").textContent = LEVEL_NAMES[to-1];
+  document.getElementById("lvupEmblem").textContent = emblemForLevel(to);
+  playFanfare();
+  document.getElementById("levelUpOverlay").classList.add("show");
+}
+
+/* ===== ACTIONS ===== */
+function checkQuestion(sid, qid){
+  var s = getSession(sid), q = s.questions.find(function(x){return x.id===qid;}), st = state.sessions[sid];
+  var prev = totalCorrectCount();
+  var ok = isAnswerCorrect(q, st.answers[qid]||"");
+  st.checked[qid] = ok;
+  scheduleSave();
+  var now = totalCorrectCount();
+  renderAll();
+  if(ok) playCorrectChime(); else playWrongBuzz();
+  checkLevelUp(prev, now);
+}
+function checkAllInSession(sid){
+  var s = getSession(sid), prev = totalCorrectCount(), st = state.sessions[sid], all = true;
+  s.questions.forEach(function(q){
+    var ok = isAnswerCorrect(q, st.answers[q.id]||"");
+    st.checked[q.id] = ok; if(!ok) all = false;
+  });
+  scheduleSave();
+  var now = totalCorrectCount();
+  renderAll();
+  if(all) playCorrectChime(); else playWrongBuzz();
+  checkLevelUp(prev, now);
+}
+function toggleReveal(sid, qid){
+  var st = state.sessions[sid];
+  st.revealed[qid] = !st.revealed[qid];
+  scheduleSave();
+  var btn = document.querySelector('#sessionView .reveal-btn[data-qid="'+qid+'"]');
+  var panel = document.querySelector('#sessionView [data-reveal-panel="'+qid+'"]');
+  if(btn){ btn.textContent = st.revealed[qid] ? "答えを隠す" : "答えを見る"; btn.classList.toggle("on", st.revealed[qid]); }
+  if(panel) panel.classList.toggle("open", st.revealed[qid]);
+}
+var pendingReset = null;
+function openConfirm(text, fn){ document.getElementById("confirmModalText").textContent = text; pendingReset = fn; document.getElementById("confirmModal").classList.add("show"); }
+function closeConfirm(){ document.getElementById("confirmModal").classList.remove("show"); pendingReset = null; }
+function resetSession(sid){
+  var s = getSession(sid), st = state.sessions[sid];
+  s.questions.forEach(function(q){ st.answers[q.id] = ""; st.checked[q.id] = null; st.revealed[q.id] = false; });
+  scheduleSave(); renderAll();
+}
+function resetAll(){ SESSIONS.forEach(function(s){ resetSession(s.id); }); }
+
+/* ===== SPEECH RECOGNITION ===== */
+var activeRecognition = null;
+function runSpeechRecognition(inputEl, micBtn){
+  if(!inputEl || !micBtn) return;
+  var Ctor = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!Ctor){ alert("お使いのブラウザは音声入力（音声認識）に対応していません。Google Chromeなどでお試しください。"); return; }
+  if(activeRecognition){ try{ activeRecognition.stop(); }catch(e){} activeRecognition = null; return; }
+  var recog = new Ctor();
+  recog.lang = "ko-KR"; recog.interimResults = false; recog.maxAlternatives = 1;
+  activeRecognition = recog; micBtn.classList.add("listening");
+  recog.onresult = function(e){ inputEl.value = e.results[0][0].transcript; inputEl.dispatchEvent(new Event("input", {bubbles:true})); };
+  recog.onerror = function(){ micBtn.classList.remove("listening"); activeRecognition = null; };
+  recog.onend = function(){ micBtn.classList.remove("listening"); activeRecognition = null; };
+  try{ recog.start(); }catch(e){ micBtn.classList.remove("listening"); activeRecognition = null; }
+}
+
+/* ===== LISTENERS ===== */
+function $(id){ return document.getElementById(id); }
+$("pickerToggleBtn").addEventListener("click", function(){ $("sessionPickerPanel").classList.toggle("open"); this.classList.toggle("open"); });
+$("reviewPickerToggleBtn").addEventListener("click", function(){ $("reviewPanel").classList.toggle("open"); this.classList.toggle("open"); });
+$("sessionList").addEventListener("click", function(e){
+  var card = e.target.closest(".session-card"); if(!card) return;
+  state.currentSessionId = card.dataset.sid; scheduleSave(); renderSessionView();
+  $("sessionPickerPanel").classList.remove("open"); $("pickerToggleBtn").classList.remove("open");
+  window.scrollTo({top:0, behavior:"smooth"});
+});
+$("overallResetBtn").addEventListener("click", function(){
+  openConfirm("すべてのセッションの記録・スコア・レベルがリセットされます。この操作は元に戻せません。本当にリセットしますか？", resetAll);
+});
+$("confirmCancelBtn").addEventListener("click", closeConfirm);
+$("confirmOkBtn").addEventListener("click", function(){ if(pendingReset) pendingReset(); closeConfirm(); });
+$("lvupOkBtn").addEventListener("click", function(){ $("levelUpOverlay").classList.remove("show"); });
+
+function resetDataModalView(){
+  $("dataTextarea").classList.add("hidden"); $("dataTextarea").value = "";
+  $("exportCopyRow").classList.add("hidden");
+  $("importTextarea").classList.add("hidden"); $("importTextarea").value = "";
+  $("importConfirmRow").classList.add("hidden");
+  var s = $("dataStatusMsg"); s.textContent = ""; s.className = "data-status";
+}
+$("dataMenuToggleBtn").addEventListener("click", function(){ resetDataModalView(); $("dataModal").classList.add("show"); });
+$("dataModalCloseBtn").addEventListener("click", function(){ $("dataModal").classList.remove("show"); });
+$("exportDownloadBtn").addEventListener("click", function(){
+  var blob = new Blob([buildExportPayload()], {type:"application/json"});
+  var url = URL.createObjectURL(blob), a = document.createElement("a");
+  a.href = url; a.download = "korean-quest-2-progress-" + new Date().toISOString().slice(0,10) + ".json";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+});
+$("exportShowBtn").addEventListener("click", function(){
+  var ta = $("dataTextarea"); ta.value = buildExportPayload(); ta.classList.remove("hidden");
+  $("exportCopyRow").classList.remove("hidden"); ta.focus(); ta.select();
+});
+$("exportCopyBtn").addEventListener("click", function(){
+  var ta = $("dataTextarea"), st = $("dataStatusMsg");
+  function ok(){ st.textContent = "✅ コピーしました。"; st.className = "data-status ok"; }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(ok).catch(function(){ ta.focus(); ta.select(); try{ document.execCommand("copy"); ok(); }catch(e){} });
+  } else { ta.focus(); ta.select(); try{ document.execCommand("copy"); ok(); }catch(e){} }
+});
+$("importFileBtn").addEventListener("click", function(){ $("dataImportFile").click(); });
+$("dataImportFile").addEventListener("change", function(e){
+  var file = e.target.files && e.target.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(){ importDataString(String(reader.result)); };
+  reader.onerror = function(){ var st = $("dataStatusMsg"); st.textContent = "❌ ファイルの読み込みに失敗しました。"; st.className = "data-status err"; };
+  reader.readAsText(file); e.target.value = "";
+});
+$("importPasteBtn").addEventListener("click", function(){ $("importTextarea").classList.remove("hidden"); $("importConfirmRow").classList.remove("hidden"); $("importTextarea").focus(); });
+$("importConfirmBtn").addEventListener("click", function(){
+  var ta = $("importTextarea");
+  if(!ta.value.trim()){ var st = $("dataStatusMsg"); st.textContent = "❌ テキストが入力されていません。"; st.className = "data-status err"; return; }
+  importDataString(ta.value);
+});
+
+document.querySelector("main").addEventListener("click", function(e){
+  var sid = state.currentSessionId;
+  if(e.target.id === "bulkCheckTop" || e.target.id === "bulkCheckBottom"){ checkAllInSession(sid); return; }
+  if(e.target.id === "sessionResetBtn"){
+    openConfirm("このセッションの記録・スコアがリセットされます。この操作は元に戻せません。本当にリセットしますか？", function(){ resetSession(sid); }); return;
+  }
+  var b;
+  if((b = e.target.closest(".check-btn"))){ checkQuestion(sid, b.dataset.qid); return; }
+  if((b = e.target.closest(".reveal-btn"))){ toggleReveal(sid, b.dataset.qid); return; }
+  if((b = e.target.closest(".review-toggle-btn"))){ toggleReviewItem(sid, b.dataset.qid); renderAll(); return; }
+  if((b = e.target.closest(".mic-btn"))){
+    runSpeechRecognition(document.querySelector('#sessionView .ans-input[data-qid="'+b.dataset.qid+'"]'), b); return;
+  }
+  if((b = e.target.closest(".speak-btn"))){ speakKorean(b.dataset.speak, b); return; }
+});
+document.querySelector("main").addEventListener("input", function(e){
+  if(e.target.classList.contains("ans-input")){
+    state.sessions[state.currentSessionId].answers[e.target.dataset.qid] = e.target.value; scheduleSave();
+  }
+});
+$("reviewPanel").addEventListener("click", function(e){
+  var b;
+  if((b = e.target.closest(".review-check-btn"))){ checkQuestion(b.dataset.sid, b.dataset.qid); return; }
+  if((b = e.target.closest(".review-reveal-btn"))){ reviewRevealToggle(b.dataset.sid, b.dataset.qid); return; }
+  if((b = e.target.closest(".review-undo-btn"))){ reviewUndo(b.dataset.sid, b.dataset.qid); return; }
+  if((b = e.target.closest(".review-mic-btn"))){
+    runSpeechRecognition(document.querySelector('.review-ans-input[data-sid="'+b.dataset.sid+'"][data-qid="'+b.dataset.qid+'"]'), b); return;
+  }
+  if((b = e.target.closest(".speak-btn"))){ speakKorean(b.dataset.speak, b); return; }
+});
+$("reviewPanel").addEventListener("input", function(e){
+  if(e.target.classList.contains("review-ans-input")){
+    state.sessions[e.target.dataset.sid].answers[e.target.dataset.qid] = e.target.value; scheduleSave();
+  }
+});
+
+function boot(){ load(); renderAll(); }
+boot();
+document.addEventListener("visibilitychange", function(){ if(document.visibilityState === "hidden"){ clearTimeout(saveTimer); save(); } });
+window.addEventListener("pagehide", function(){ clearTimeout(saveTimer); save(); });
+})();
+</script>
+</body>
+</html>

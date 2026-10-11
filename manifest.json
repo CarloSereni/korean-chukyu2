@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "韓国語中級編２",
+  "short_name": "中級編２",
+  "description": "韓国語中級編２の練習",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4e8c9",
+  "theme_color": "#3d4f6e",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
